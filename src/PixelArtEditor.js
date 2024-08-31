@@ -8,6 +8,8 @@ const PixelArtEditor = () => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [backgroundPosition, setBackgroundPosition] = useState({ x: 0, y: 0 });
   const [backgroundScale, setBackgroundScale] = useState(1);
+  const [savedColors, setSavedColors] = useState({});
+  const [alias, setAlias] = useState('');
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -31,7 +33,6 @@ const PixelArtEditor = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       setBackgroundImage(event.target.result);
-      // Reset position and scale when a new image is uploaded
       setBackgroundPosition({ x: 0, y: 0 });
       setBackgroundScale(1);
     };
@@ -46,6 +47,22 @@ const PixelArtEditor = () => {
     setBackgroundScale(prev => Math.max(0.1, Math.min(5, prev + delta)));
   };
 
+  const saveColor = () => {
+    if (alias) {
+      setSavedColors(prevSavedColors => ({
+        ...prevSavedColors,
+        [alias]: { ...color }
+      }));
+      setAlias('');
+    }
+  };
+
+  const applySavedColor = (alias) => {
+    if (savedColors[alias]) {
+      setColor(savedColors[alias]);
+    }
+  };
+
   useEffect(() => {
     if (backgroundImage && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -53,19 +70,11 @@ const PixelArtEditor = () => {
       const img = new Image();
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Calculate the scaled dimensions
         const scaledWidth = img.width * backgroundScale;
         const scaledHeight = img.height * backgroundScale;
-        
-        // Calculate position to center the image
         const x = (canvas.width - scaledWidth) / 2 + backgroundPosition.x;
         const y = (canvas.height - scaledHeight) / 2 + backgroundPosition.y;
-        
-        // Draw the image
         ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-        
-        // Apply the semi-transparent overlay
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -115,6 +124,34 @@ const PixelArtEditor = () => {
           placeholder="B"
           style={{ width: '50px' }}
         />
+      </div>
+      <div>
+        <input
+          type="text"
+          value={alias}
+          onChange={(e) => setAlias(e.target.value)}
+          placeholder="Alias del color"
+          style={{ marginRight: '0.5rem' }}
+        />
+        <button onClick={saveColor}>Guardar color</button>
+      </div>
+      <div style={{ marginTop: '1rem' }}>
+        {Object.keys(savedColors).map((alias) => (
+          <button
+            key={alias}
+            onClick={() => applySavedColor(alias)}
+            style={{
+              margin: '0.2rem',
+              padding: '0.5rem',
+              backgroundColor: `rgb(${savedColors[alias].r}, ${savedColors[alias].g}, ${savedColors[alias].b})`,
+              color: 'white',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {alias}
+          </button>
+        ))}
       </div>
       <input type="file" onChange={handleImageUpload} accept="image/*" />
       {backgroundImage && (
