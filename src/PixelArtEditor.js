@@ -6,6 +6,8 @@ const PixelArtEditor = () => {
   const [color, setColor] = useState({ r: 0, g: 0, b: 0 });
   const [pixels, setPixels] = useState([]);
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [backgroundPosition, setBackgroundPosition] = useState({ x: 0, y: 0 });
+  const [backgroundScale, setBackgroundScale] = useState(1);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -29,8 +31,19 @@ const PixelArtEditor = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       setBackgroundImage(event.target.result);
+      // Reset position and scale when a new image is uploaded
+      setBackgroundPosition({ x: 0, y: 0 });
+      setBackgroundScale(1);
     };
     reader.readAsDataURL(file);
+  };
+
+  const moveBackground = (dx, dy) => {
+    setBackgroundPosition(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+  };
+
+  const scaleBackground = (delta) => {
+    setBackgroundScale(prev => Math.max(0.1, Math.min(5, prev + delta)));
   };
 
   useEffect(() => {
@@ -40,15 +53,27 @@ const PixelArtEditor = () => {
       const img = new Image();
       img.onload = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.globalAlpha = 0.3; // Ajusta la opacidad aquí
+        
+        // Calculate the scaled dimensions
+        const scaledWidth = img.width * backgroundScale;
+        const scaledHeight = img.height * backgroundScale;
+        
+        // Calculate position to center the image
+        const x = (canvas.width - scaledWidth) / 2 + backgroundPosition.x;
+        const y = (canvas.height - scaledHeight) / 2 + backgroundPosition.y;
+        
+        // Draw the image
+        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+        
+        // Apply the semi-transparent overlay
+        ctx.globalAlpha = 0.3;
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 1.0;
       };
       img.src = backgroundImage;
     }
-  }, [backgroundImage, canvasWidth, canvasHeight]);
+  }, [backgroundImage, canvasWidth, canvasHeight, backgroundPosition, backgroundScale]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
@@ -92,6 +117,16 @@ const PixelArtEditor = () => {
         />
       </div>
       <input type="file" onChange={handleImageUpload} accept="image/*" />
+      {backgroundImage && (
+        <div>
+          <button onClick={() => moveBackground(0, -10)}>↑</button>
+          <button onClick={() => moveBackground(0, 10)}>↓</button>
+          <button onClick={() => moveBackground(-10, 0)}>←</button>
+          <button onClick={() => moveBackground(10, 0)}>→</button>
+          <button onClick={() => scaleBackground(0.1)}>Zoom +</button>
+          <button onClick={() => scaleBackground(-0.1)}>Zoom -</button>
+        </div>
+      )}
       <div
         style={{
           display: 'grid',
