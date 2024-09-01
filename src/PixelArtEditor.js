@@ -16,12 +16,33 @@ const PixelArtEditor = () => {
     setPixels(Array(canvasWidth * canvasHeight).fill(''));
   }, [canvasWidth, canvasHeight]);
 
-  const handlePixelClick = (index) => {
-    setPixels(prevPixels => {
-      const newPixels = [...prevPixels];
-      newPixels[index] = `rgb(${color.r}, ${color.g}, ${color.b})`;
-      return newPixels;
-    });
+  const calculateCoordinates = (index) => {
+    const x = index % canvasWidth - Math.floor(canvasWidth / 2);
+    const y = Math.floor(canvasHeight / 2) - Math.floor(index / canvasWidth);
+    return { x, y };
+  };
+
+  const handlePixelClick = (index, event) => {
+    event.preventDefault(); // Prevent default right-click menu
+    if (event.button === 0) { // Left click
+      const currentAlias = Object.keys(savedColors).find(key => 
+        savedColors[key].r === color.r && 
+        savedColors[key].g === color.g && 
+        savedColors[key].b === color.b
+      ) || 'UnnamedColor';
+
+      setPixels(prevPixels => {
+        const newPixels = [...prevPixels];
+        newPixels[index] = `rgb(${color.r}, ${color.g}, ${color.b})`;
+        return newPixels;
+      });
+    } else if (event.button === 2) { // Right click
+      setPixels(prevPixels => {
+        const newPixels = [...prevPixels];
+        newPixels[index] = '';
+        return newPixels;
+      });
+    }
   };
 
   const handleColorChange = (component, value) => {
@@ -63,6 +84,24 @@ const PixelArtEditor = () => {
     }
   };
 
+  const copyToClipboard = () => {
+    const pixelCommands = pixels.map((pixelColor, index) => {
+      if (pixelColor) {
+        const { x, y } = calculateCoordinates(index);
+        const currentAlias = Object.keys(savedColors).find(key => 
+          `rgb(${savedColors[key].r}, ${savedColors[key].g}, ${savedColors[key].b})` === pixelColor
+        ) || 'UnnamedColor';
+        return `drawPixel(${x},${y},${currentAlias});`;
+      }
+      return null;
+    }).filter(Boolean);
+
+    const clipboardText = pixelCommands.join('\n\t\t');
+    navigator.clipboard.writeText(`[${clipboardText}]`)
+      .then(() => alert('Copied to clipboard!'))
+      .catch(err => console.error('Failed to copy: ', err));
+  };
+
   useEffect(() => {
     if (backgroundImage && canvasRef.current) {
       const canvas = canvasRef.current;
@@ -85,7 +124,8 @@ const PixelArtEditor = () => {
   }, [backgroundImage, canvasWidth, canvasHeight, backgroundPosition, backgroundScale]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}
+         onContextMenu={(e) => e.preventDefault()}>
       <div>
         <input
           type="number"
@@ -156,12 +196,39 @@ const PixelArtEditor = () => {
       <input type="file" onChange={handleImageUpload} accept="image/*" />
       {backgroundImage && (
         <div>
-          <button onClick={() => moveBackground(0, -10)}>↑</button>
-          <button onClick={() => moveBackground(0, 10)}>↓</button>
-          <button onClick={() => moveBackground(-10, 0)}>←</button>
-          <button onClick={() => moveBackground(10, 0)}>→</button>
-          <button onClick={() => scaleBackground(0.1)}>Zoom +</button>
-          <button onClick={() => scaleBackground(-0.1)}>Zoom -</button>
+          <div>
+            <button onClick={() => moveBackground(0, -1)}>↑</button>
+            <button onClick={() => moveBackground(0, 1)}>↓</button>
+            <button onClick={() => moveBackground(-1, 0)}>←</button>
+            <button onClick={() => moveBackground(1, 0)}>→</button>
+          </div>
+          <div>
+            <input
+              type="number"
+              value={backgroundPosition.x}
+              onChange={(e) => setBackgroundPosition(prev => ({ ...prev, x: parseInt(e.target.value) || 0 }))}
+              placeholder="X"
+              style={{ width: '50px', marginRight: '0.5rem' }}
+            />
+            <input
+              type="number"
+              value={backgroundPosition.y}
+              onChange={(e) => setBackgroundPosition(prev => ({ ...prev, y: parseInt(e.target.value) || 0 }))}
+              placeholder="Y"
+              style={{ width: '50px' }}
+            />
+          </div>
+          <div>
+            <button onClick={() => scaleBackground(0.1)}>Zoom +</button>
+            <button onClick={() => scaleBackground(-0.1)}>Zoom -</button>
+            <input
+              type="number"
+              value={backgroundScale}
+              onChange={(e) => setBackgroundScale(parseFloat(e.target.value) || 1)}
+              step="0.1"
+              style={{ width: '50px' }}
+            />
+          </div>
         </div>
       )}
       <div
@@ -198,10 +265,12 @@ const PixelArtEditor = () => {
               position: 'relative',
               zIndex: 1,
             }}
-            onClick={() => handlePixelClick(index)}
+            onMouseDown={(e) => handlePixelClick(index, e)}
+            onContextMenu={(e) => e.preventDefault()}
           />
         ))}
       </div>
+      <button onClick={copyToClipboard}>Copiar al portapapeles</button>
     </div>
   );
 };
