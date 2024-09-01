@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const EditorArtePixelado = () => {
-  const [anchoLienzo, setAnchoLienzo] = useState(16);
+  const [anchoLienzo, setAnchoLienzo] = useState(23);
   const [altoLienzo, setAltoLienzo] = useState(16);
   const [color, setColor] = useState('#000000');
   const [pixeles, setPixeles] = useState([]);
