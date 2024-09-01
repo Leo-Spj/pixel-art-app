@@ -78,38 +78,38 @@ const EditorArtePixelado = () => {
     }
   };
 
-  const generarEnumColor = () => {
+  const generarCodigoCompleto = () => {
     let enumCode = 'enum Color { ';
-    let switchCode = 'void pintarColor(Color color) { switch(color) { ';
-
-    Object.entries(coloresGuardados).forEach(([alias, colorHex]) => {
-      enumCode += `${alias}, `;
+    let switchCode = '\tvoid pintarColor(Color color) {\n\t\tswitch(color) {\n';
+    
+    Object.entries(coloresGuardados).forEach(([alias, colorHex], index) => {
+      enumCode += alias + (index < Object.entries(coloresGuardados).length - 1 ? ', ' : ' ');
       const r = parseInt(colorHex.slice(1, 3), 16) / 255;
       const g = parseInt(colorHex.slice(3, 5), 16) / 255;
       const b = parseInt(colorHex.slice(5, 7), 16) / 255;
-      switchCode += `case ${alias}: glColor3d(${r.toFixed(2)}, ${g.toFixed(2)}, ${b.toFixed(2)}); break; `;
+      switchCode += `\t\t\tcase ${alias}: glColor3d(${r.toFixed(2)}, ${g.toFixed(2)}, ${b.toFixed(2)});\n\t\t\tbreak;\n`;
     });
 
-    enumCode = enumCode.slice(0, -2) + ' };';
-    switchCode += '} }';
+    enumCode += '};\n\n';
+    switchCode += '\t\t}\n\t}\n\n';
 
-    return `[${enumCode} ${switchCode}]`;
-  };
-
-  const copiarAlPortapapeles = () => {
-    const comandosPixel = pixeles.map((colorPixel, indice) => {
+    const pixelCommands = pixeles.map((colorPixel, indice) => {
       if (colorPixel) {
         const { x, y } = calcularCoordenadas(indice);
         const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
-        return `dibujarPixel(${x},${y},${aliasActual});`;
+        return `\t\tdibujarPixel(${x},${y},${aliasActual});`;
       }
       return null;
     }).filter(Boolean);
 
-    const enumColorCode = generarEnumColor();
-    const textoPortapapeles = `${enumColorCode}\n[${comandosPixel.join('\n\t\t')}]`;
-    
-    navigator.clipboard.writeText(textoPortapapeles)
+    const figuraCode = '\tvoid figura() {\n' + pixelCommands.join('\n') + '\n\t}';
+
+    return `[${enumCode}${switchCode}${figuraCode}]`;
+  };
+
+  const copiarAlPortapapeles = () => {
+    const codigoCompleto = generarCodigoCompleto();
+    navigator.clipboard.writeText(codigoCompleto)
       .then(() => alert('¡Copiado al portapapeles!'))
       .catch(err => console.error('Error al copiar: ', err));
   };
@@ -136,51 +136,67 @@ const EditorArtePixelado = () => {
   }, [imagenFondo, anchoLienzo, altoLienzo, posicionFondo, escalaFondo]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem' }}
-         onContextMenu={(e) => e.preventDefault()}>
-      <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '1rem',
+      padding: '2rem',
+      backgroundColor: '#f0f0f0',
+      borderRadius: '10px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    }} onContextMenu={(e) => e.preventDefault()}>
+      <h1 style={{ color: '#333', marginBottom: '1rem' }}>Editor de Arte Pixelado</h1>
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
         <input
           type="number"
           value={anchoLienzo}
           onChange={(e) => setAnchoLienzo(parseInt(e.target.value))}
           placeholder="Ancho"
-          style={{ width: '60px', marginRight: '0.5rem' }}
+          style={{ width: '60px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
         />
         <input
           type="number"
           value={altoLienzo}
           onChange={(e) => setAltoLienzo(parseInt(e.target.value))}
           placeholder="Alto"
-          style={{ width: '60px' }}
+          style={{ width: '60px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
         />
       </div>
-      <div>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
         <input
           type="color"
           value={color}
           onChange={(e) => manejarCambioColor(e.target.value)}
-          style={{ marginRight: '0.5rem' }}
+          style={{ width: '50px', height: '50px', padding: '0', border: 'none', borderRadius: '5px' }}
         />
         <input
           type="text"
           value={alias}
           onChange={(e) => setAlias(e.target.value)}
           placeholder="Alias del color"
-          style={{ marginRight: '0.5rem' }}
+          style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
         />
-        <button onClick={guardarColor}>Guardar color</button>
+        <button onClick={guardarColor} style={{
+          padding: '0.5rem 1rem',
+          backgroundColor: '#4CAF50',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}>Guardar color</button>
       </div>
-      <div style={{ marginTop: '1rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
         {Object.entries(coloresGuardados).map(([alias, colorGuardado]) => (
           <button
             key={alias}
             onClick={() => aplicarColorGuardado(alias)}
             style={{
-              margin: '0.2rem',
-              padding: '0.5rem',
+              padding: '0.5rem 1rem',
               backgroundColor: colorGuardado,
               color: 'white',
               border: 'none',
+              borderRadius: '5px',
               cursor: 'pointer'
             }}
           >
@@ -188,32 +204,37 @@ const EditorArtePixelado = () => {
           </button>
         ))}
       </div>
-      <input type="file" onChange={manejarSubidaImagen} accept="image/*" />
+      <input
+        type="file"
+        onChange={manejarSubidaImagen}
+        accept="image/*"
+        style={{ marginBottom: '1rem' }}
+      />
       {imagenFondo && (
-        <div>
-          <div>
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
             <button onClick={() => moverFondo(0, -1)}>↑</button>
             <button onClick={() => moverFondo(0, 1)}>↓</button>
             <button onClick={() => moverFondo(-1, 0)}>←</button>
             <button onClick={() => moverFondo(1, 0)}>→</button>
           </div>
-          <div>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
             <input
               type="number"
               value={posicionFondo.x}
               onChange={(e) => setPosicionFondo(prev => ({ ...prev, x: parseInt(e.target.value) || 0 }))}
               placeholder="X"
-              style={{ width: '50px', marginRight: '0.5rem' }}
+              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
             />
             <input
               type="number"
               value={posicionFondo.y}
               onChange={(e) => setPosicionFondo(prev => ({ ...prev, y: parseInt(e.target.value) || 0 }))}
               placeholder="Y"
-              style={{ width: '50px' }}
+              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
             />
           </div>
-          <div>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
             <button onClick={() => escalarFondo(0.1)}>Zoom +</button>
             <button onClick={() => escalarFondo(-0.1)}>Zoom -</button>
             <input
@@ -221,7 +242,7 @@ const EditorArtePixelado = () => {
               value={escalaFondo}
               onChange={(e) => setEscalaFondo(parseFloat(e.target.value) || 1)}
               step="0.1"
-              style={{ width: '50px' }}
+              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
             />
           </div>
         </div>
@@ -232,8 +253,9 @@ const EditorArtePixelado = () => {
           gridTemplateColumns: `repeat(${anchoLienzo}, 1fr)`,
           gap: '1px',
           border: '1px solid #ccc',
-          backgroundColor: '#f0f0f0',
+          backgroundColor: '#fff',
           position: 'relative',
+          marginBottom: '1rem'
         }}
       >
         <canvas
@@ -265,7 +287,14 @@ const EditorArtePixelado = () => {
           />
         ))}
       </div>
-      <button onClick={copiarAlPortapapeles}>Copiar al portapapeles</button>
+      <button onClick={copiarAlPortapapeles} style={{
+        padding: '0.5rem 1rem',
+        backgroundColor: '#2196F3',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer'
+      }}>Copiar al portapapeles</button>
     </div>
   );
 };
