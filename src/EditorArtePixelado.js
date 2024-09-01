@@ -10,6 +10,8 @@ const EditorArtePixelado = () => {
   const [escalaFondo, setEscalaFondo] = useState(1);
   const [coloresGuardados, setColoresGuardados] = useState({});
   const [alias, setAlias] = useState('');
+  const [mostrarFondo, setMostrarFondo] = useState(true);
+  const [tamanoCelda, setTamanoCelda] = useState(20); // Nuevo estado para el tamaño de las celdas
   const refLienzo = useRef(null);
 
   useEffect(() => {
@@ -24,6 +26,10 @@ const EditorArtePixelado = () => {
 
   const manejarClicPixel = (indice, evento) => {
     evento.preventDefault();
+    if (!Object.values(coloresGuardados).includes(color)) {
+      alert('Por favor, guarda el color con un alias antes de pintar.');
+      return;
+    }
     if (evento.button === 0) {
       setPixeles(pixelesAnteriores => {
         const nuevosPixeles = [...pixelesAnteriores];
@@ -72,6 +78,14 @@ const EditorArtePixelado = () => {
     }
   };
 
+  const eliminarColorGuardado = (alias) => {
+    setColoresGuardados(anteriores => {
+      const nuevosColores = { ...anteriores };
+      delete nuevosColores[alias];
+      return nuevosColores;
+    });
+  };
+
   const aplicarColorGuardado = (alias) => {
     if (coloresGuardados[alias]) {
       setColor(coloresGuardados[alias]);
@@ -105,7 +119,7 @@ const EditorArtePixelado = () => {
     const figuraCode = 'void figura() {\n' + pixelCommands.join('\n') + '\n\t}';
 
     return `
-    double escalado = 0.5; // <- modifica para modificar el tamaño de la figura
+    double escalado = 0.5; // <- MODIFICA para ajustar el TAMAÑO de la figura
     
     void draw(){
         glClearColor(0.9,0.9,0.9,1);
@@ -160,25 +174,27 @@ const EditorArtePixelado = () => {
   };
 
   useEffect(() => {
-    if (imagenFondo && refLienzo.current) {
+    if (refLienzo.current) {
       const lienzo = refLienzo.current;
       const ctx = lienzo.getContext('2d');
-      const img = new Image();
-      img.onload = () => {
-        ctx.clearRect(0, 0, lienzo.width, lienzo.height);
-        const anchoEscalado = img.width * escalaFondo;
-        const altoEscalado = img.height * escalaFondo;
-        const x = (lienzo.width - anchoEscalado) / 2 + posicionFondo.x;
-        const y = (lienzo.height - altoEscalado) / 2 + posicionFondo.y;
-        ctx.drawImage(img, x, y, anchoEscalado, altoEscalado);
-        ctx.globalAlpha = 0.3;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, lienzo.width, lienzo.height);
-        ctx.globalAlpha = 1.0;
-      };
-      img.src = imagenFondo;
+      ctx.clearRect(0, 0, lienzo.width, lienzo.height);
+      if (imagenFondo && mostrarFondo) {
+        const img = new Image();
+        img.onload = () => {
+          const anchoEscalado = img.width * escalaFondo;
+          const altoEscalado = img.height * escalaFondo;
+          const x = (lienzo.width - anchoEscalado) / 2 + posicionFondo.x;
+          const y = (lienzo.height - altoEscalado) / 2 + posicionFondo.y;
+          ctx.drawImage(img, x, y, anchoEscalado, altoEscalado);
+          ctx.globalAlpha = 0.3;
+          ctx.fillStyle = 'white';
+          ctx.fillRect(0, 0, lienzo.width, lienzo.height);
+          ctx.globalAlpha = 1.0;
+        };
+        img.src = imagenFondo;
+      }
     }
-  }, [imagenFondo, anchoLienzo, altoLienzo, posicionFondo, escalaFondo]);
+  }, [imagenFondo, anchoLienzo, altoLienzo, posicionFondo, escalaFondo, mostrarFondo]);
 
   return (
     <div style={{
@@ -207,6 +223,13 @@ const EditorArtePixelado = () => {
           placeholder="Alto"
           style={{ width: '60px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
         />
+        <input
+          type="number"
+          value={tamanoCelda}
+          onChange={(e) => setTamanoCelda(parseInt(e.target.value))}
+          placeholder="Tamaño de celda"
+          style={{ width: '100px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+        />
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
         <input
@@ -220,7 +243,7 @@ const EditorArtePixelado = () => {
           value={alias}
           onChange={(e) => setAlias(e.target.value)}
           placeholder="Alias del color"
-          style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+          style={{ padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc', width: '230px'  }}
         />
         <button onClick={guardarColor} style={{
           padding: '0.5rem 1rem',
@@ -233,20 +256,34 @@ const EditorArtePixelado = () => {
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
         {Object.entries(coloresGuardados).map(([alias, colorGuardado]) => (
-          <button
-            key={alias}
-            onClick={() => aplicarColorGuardado(alias)}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: colorGuardado,
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            {alias}
-          </button>
+          <div key={alias} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button
+              onClick={() => aplicarColorGuardado(alias)}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: colorGuardado,
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              {alias}
+            </button>
+            <button
+              onClick={() => eliminarColorGuardado(alias)}
+              style={{
+                padding: '0.5rem',
+                backgroundColor: '#f44336',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              X
+            </button>
+          </div>
         ))}
       </div>
       <input
@@ -256,47 +293,61 @@ const EditorArtePixelado = () => {
         style={{ marginBottom: '1rem' }}
       />
       {imagenFondo && (
-        <div style={{ marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <button onClick={() => moverFondo(0, -1)}>↑</button>
-            <button onClick={() => moverFondo(0, 1)}>↓</button>
-            <button onClick={() => moverFondo(-1, 0)}>←</button>
-            <button onClick={() => moverFondo(1, 0)}>→</button>
+        <div style={{ marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <button onClick={() => moverFondo(0, -1)}>↑</button>
+              <button onClick={() => moverFondo(0, 1)}>↓</button>
+              <button onClick={() => moverFondo(-1, 0)}>←</button>
+              <button onClick={() => moverFondo(1, 0)}>→</button>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <input
+                type="number"
+                value={posicionFondo.x}
+                onChange={(e) => setPosicionFondo(prev => ({ ...prev, x: parseInt(e.target.value) || 0 }))}
+                placeholder="X"
+                style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+              <input
+                type="number"
+                value={posicionFondo.y}
+                onChange={(e) => setPosicionFondo(prev => ({ ...prev, y: parseInt(e.target.value) || 0 }))}
+                placeholder="Y"
+                style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <button onClick={() => escalarFondo(0.1)}>Zoom +</button>
+              <button onClick={() => escalarFondo(-0.1)}>Zoom -</button>
+              <input
+                type="number"
+                value={escalaFondo}
+                onChange={(e) => setEscalaFondo(parseFloat(e.target.value) || 1)}
+                step="0.1"
+                style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+              <label htmlFor="mostrarFondo">Mostrar fondo</label>
+              <input
+                type="checkbox"
+                id="mostrarFondo"
+                checked={mostrarFondo}
+                onChange={(e) => setMostrarFondo(e.target.checked)}
+              />
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <input
-              type="number"
-              value={posicionFondo.x}
-              onChange={(e) => setPosicionFondo(prev => ({ ...prev, x: parseInt(e.target.value) || 0 }))}
-              placeholder="X"
-              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-            />
-            <input
-              type="number"
-              value={posicionFondo.y}
-              onChange={(e) => setPosicionFondo(prev => ({ ...prev, y: parseInt(e.target.value) || 0 }))}
-              placeholder="Y"
-              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-            />
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <button onClick={() => escalarFondo(0.1)}>Zoom +</button>
-            <button onClick={() => escalarFondo(-0.1)}>Zoom -</button>
-            <input
-              type="number"
-              value={escalaFondo}
-              onChange={(e) => setEscalaFondo(parseFloat(e.target.value) || 1)}
-              step="0.1"
-              style={{ width: '50px', padding: '0.5rem', borderRadius: '5px', border: '1px solid #ccc' }}
-            />
+          <div>
+            <img src={imagenFondo} alt="Previsualización" style={{ width: '250px', height: '250px', objectFit: 'contain' }} />
           </div>
         </div>
       )}
-      <div
+            <div
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${anchoLienzo}, 1fr)`,
-          gap: '1px',
+          gap: '0', // Cambiado de '1px' a '0'
           border: '1px solid #ccc',
           backgroundColor: '#fff',
           position: 'relative',
@@ -305,8 +356,8 @@ const EditorArtePixelado = () => {
       >
         <canvas
           ref={refLienzo}
-          width={anchoLienzo * 20}
-          height={altoLienzo * 20}
+          width={anchoLienzo * tamanoCelda}
+          height={altoLienzo * tamanoCelda}
           style={{
             position: 'absolute',
             top: 0,
@@ -320,8 +371,8 @@ const EditorArtePixelado = () => {
           <div
             key={indice}
             style={{
-              width: '20px',
-              height: '20px',
+              width: `${tamanoCelda}px`,
+              height: `${tamanoCelda}px`,
               backgroundColor: colorPixel || 'transparent',
               border: '1px solid #e0e0e0',
               position: 'relative',
