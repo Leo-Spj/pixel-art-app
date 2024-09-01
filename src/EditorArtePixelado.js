@@ -6,7 +6,7 @@ import SubidorImagen from './components/SubidorImagen';
 import ControlFondo from './components/ControlFondo';
 import Lienzo from './components/Lienzo';
 import GeneradorCodigo from './components/GeneradorCodigo';
-import { calcularCoordenadas } from './utils/coordenadas';
+
 import { generarCodigoCompleto } from './utils/generadorCodigo';
 
 const EditorArtePixelado = () => {
@@ -157,7 +157,8 @@ const EditorArtePixelado = () => {
       <GeneradorCodigo
         coloresGuardados={coloresGuardados}
         pixeles={pixeles}
-        calcularCoordenadas={calcularCoordenadas}
+        anchoLienzo={anchoLienzo}
+        altoLienzo={altoLienzo}
         generarCodigoCompleto={generarCodigoCompleto}
       />
     </div>

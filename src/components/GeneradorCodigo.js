@@ -1,8 +1,8 @@
 import React from 'react';
 
-const GeneradorCodigo = ({ coloresGuardados, pixeles, calcularCoordenadas, generarCodigoCompleto }) => {
+const GeneradorCodigo = ({ coloresGuardados, pixeles, anchoLienzo, altoLienzo, generarCodigoCompleto }) => {
   const copiarAlPortapapeles = () => {
-    const codigoCompleto = generarCodigoCompleto(coloresGuardados, pixeles, calcularCoordenadas);
+    const codigoCompleto = generarCodigoCompleto(coloresGuardados, pixeles, anchoLienzo, altoLienzo);
     navigator.clipboard.writeText(codigoCompleto)
       .then(() => alert('¡Copiado al portapapeles!'))
       .catch(err => console.error('Error al copiar: ', err));

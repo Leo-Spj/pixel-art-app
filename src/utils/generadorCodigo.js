@@ -1,4 +1,6 @@
-export const generarCodigoCompleto = (coloresGuardados, pixeles, calcularCoordenadas) => {
+import { calcularCoordenadas } from './coordenadas';
+
+export const generarCodigoCompleto = (coloresGuardados, pixeles, anchoLienzo, altoLienzo) => {
     let enumCode = 'enum Color { ';
     let switchCode = '\tvoid pintarColor(Color color) {\n\t\tswitch(color) {\n';
     
@@ -15,7 +17,7 @@ export const generarCodigoCompleto = (coloresGuardados, pixeles, calcularCoorden
   
     const pixelCommands = pixeles.map((colorPixel, indice) => {
       if (colorPixel) {
-        const { x, y } = calcularCoordenadas(indice);
+        const { x, y } = calcularCoordenadas(indice, anchoLienzo, altoLienzo);
         const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
         return `\t\tdibujarPixel(${x},${y},${aliasActual});`;
       }
