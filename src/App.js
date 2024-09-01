@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditorArtePixelado from './EditorArtePixelado';
+import ModalAdvertencia from './ModalAdvertencia';
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     const esDispositivoMovil = () => {
       return /Mobi|Android/i.test(navigator.userAgent);
@@ -9,7 +12,7 @@ function App() {
 
     const bloquearAccesoMovil = () => {
       if (esDispositivoMovil()) {
-        alert('Esta página no es soportada en dispositivos móviles. Por favor, accede desde un navegador en un dispositivo de escritorio.');
+        setIsModalOpen(true);
       }
     };
 
@@ -19,6 +22,7 @@ function App() {
   return (
     <div className="App">
       <EditorArtePixelado />
+      <ModalAdvertencia isOpen={isModalOpen} />
     </div>
   );
 }
