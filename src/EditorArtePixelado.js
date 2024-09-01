@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ControlTamanio from './components/ControlTamanio';
 import SelectorColor from './components/SelectorColor';
 import ColoresGuardados from './components/ColoresGuardados';
@@ -22,30 +22,56 @@ const EditorArtePixelado = () => {
   const [alias, setAlias] = useState('');
   const [mostrarFondo, setMostrarFondo] = useState(true);
 
+  const [estaPintando, setEstaPintando] = useState(false);
+  const [estaBorrando, setEstaBorrando] = useState(false);
+
   useEffect(() => {
     setPixeles(Array(anchoLienzo * altoLienzo).fill(''));
   }, [anchoLienzo, altoLienzo]);
 
-  const manejarClicPixel = (indice, evento) => {
+  const manejarClicPixel = useCallback((indice, evento) => {
     evento.preventDefault();
     if (!Object.values(coloresGuardados).includes(color)) {
       alert('Por favor, guarda el color con un alias antes de pintar.');
       return;
     }
     if (evento.button === 0) {
-      setPixeles(pixelesAnteriores => {
-        const nuevosPixeles = [...pixelesAnteriores];
-        nuevosPixeles[indice] = color;
-        return nuevosPixeles;
-      });
+      setEstaPintando(true);
+      pintarPixel(indice);
     } else if (evento.button === 2) {
-      setPixeles(pixelesAnteriores => {
-        const nuevosPixeles = [...pixelesAnteriores];
-        nuevosPixeles[indice] = '';
-        return nuevosPixeles;
-      });
+      setEstaBorrando(true);
+      borrarPixel(indice);
     }
-  };
+  }, [color, coloresGuardados]);
+
+  const manejarMovimientoMouse = useCallback((indice) => {
+    if (estaPintando) {
+      pintarPixel(indice);
+    } else if (estaBorrando) {
+      borrarPixel(indice);
+    }
+  }, [estaPintando, estaBorrando]);
+
+  const manejarFinPintado = useCallback(() => {
+    setEstaPintando(false);
+    setEstaBorrando(false);
+  }, []);
+
+  const pintarPixel = useCallback((indice) => {
+    setPixeles(pixelesAnteriores => {
+      const nuevosPixeles = [...pixelesAnteriores];
+      nuevosPixeles[indice] = color;
+      return nuevosPixeles;
+    });
+  }, [color]);
+
+  const borrarPixel = useCallback((indice) => {
+    setPixeles(pixelesAnteriores => {
+      const nuevosPixeles = [...pixelesAnteriores];
+      nuevosPixeles[indice] = '';
+      return nuevosPixeles;
+    });
+  }, []);
 
   const guardarColor = () => {
     if (alias && !coloresGuardados[alias]) {
@@ -121,6 +147,8 @@ const EditorArtePixelado = () => {
         tamanoCelda={tamanoCelda}
         pixeles={pixeles}
         manejarClicPixel={manejarClicPixel}
+        manejarMovimientoMouse={manejarMovimientoMouse}
+        manejarFinPintado={manejarFinPintado}
         imagenFondo={imagenFondo}
         posicionFondo={posicionFondo}
         escalaFondo={escalaFondo}

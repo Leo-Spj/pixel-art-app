@@ -1,6 +1,18 @@
 import React, { useRef, useEffect } from 'react';
 
-const Lienzo = ({ anchoLienzo, altoLienzo, tamanoCelda, pixeles, manejarClicPixel, imagenFondo, posicionFondo, escalaFondo, mostrarFondo }) => {
+const Lienzo = ({ 
+  anchoLienzo, 
+  altoLienzo, 
+  tamanoCelda, 
+  pixeles, 
+  manejarClicPixel, 
+  manejarMovimientoMouse, 
+  manejarFinPintado,
+  imagenFondo, 
+  posicionFondo, 
+  escalaFondo, 
+  mostrarFondo 
+}) => {
   const refLienzo = useRef(null);
 
   useEffect(() => {
@@ -37,6 +49,8 @@ const Lienzo = ({ anchoLienzo, altoLienzo, tamanoCelda, pixeles, manejarClicPixe
           position: 'relative',
           marginBottom: '1rem'
         }}
+        onMouseUp={manejarFinPintado}
+        onMouseLeave={manejarFinPintado}
       >
         <canvas
           ref={refLienzo}
@@ -63,6 +77,7 @@ const Lienzo = ({ anchoLienzo, altoLienzo, tamanoCelda, pixeles, manejarClicPixe
               zIndex: 1,
             }}
             onMouseDown={(e) => manejarClicPixel(indice, e)}
+            onMouseEnter={() => manejarMovimientoMouse(indice)}
             onContextMenu={(e) => e.preventDefault()}
           />
         ))}
