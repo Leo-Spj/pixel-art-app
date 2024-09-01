@@ -102,9 +102,54 @@ const EditorArtePixelado = () => {
       return null;
     }).filter(Boolean);
 
-    const figuraCode = '\tvoid figura() {\n' + pixelCommands.join('\n') + '\n\t}';
+    const figuraCode = 'void figura() {\n' + pixelCommands.join('\n') + '\n\t}';
 
-    return `[${enumCode}${switchCode}${figuraCode}]`;
+    return `
+    double escalado = 0.5; // <- modifica para modificar el tamaño de la figura
+    
+    void draw(){
+        glClearColor(0.9,0.9,0.9,1);
+        figura();
+    }
+    
+    ${enumCode}${switchCode}
+    void drawTriangle(double a1, double a2,
+                      double b1, double b2,
+                      double c1, double c2,
+                      Color color
+                      ){
+        pintarColor(color);
+        glBegin(GL_TRIANGLES);
+        {
+            glVertex2d(a1*escalado, a2*escalado);
+            glVertex2d(b1*escalado, b2*escalado);
+            glVertex2d(c1*escalado, c2*escalado);
+        };
+        glEnd();
+    };
+    
+    void cuadrado_de2trinagulos(double a1, double a2, double b1, double b2, double c1, double c2, double d1, double d2, Color color){
+        glBegin(GL_TRIANGLES);
+        {
+            drawTriangle(a1, a2, b1, b2, d1, d2, color);
+            drawTriangle(b1, b2, c1, c2, d1, d2, color);
+        }        
+        glEnd();
+    }
+    
+    void dibujarPixel(double a1, double a2, Color color) {
+        const double lado = 1.0;
+        double b1 = a1;
+        double b2 = a2 + lado;
+        double c1 = b1 + lado;
+        double c2 = b2;
+        double d1 = c1;
+        double d2 = a2;
+        cuadrado_de2trinagulos(a1, a2, b1, b2, c1, c2, d1, d2, color);
+    }
+    
+    ${figuraCode}
+    `;
   };
 
   const copiarAlPortapapeles = () => {
