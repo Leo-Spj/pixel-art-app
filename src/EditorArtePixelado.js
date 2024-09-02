@@ -84,13 +84,24 @@ const EditorArtePixelado = () => {
   };
 
   const eliminarColorGuardado = (alias) => {
+    const colorEnUso = coloresGuardados[alias];
+    
+    // Verificar si el color está siendo usado en el lienzo
+    const estaEnUso = pixeles.some(pixelColor => pixelColor === colorEnUso);
+    
+    if (estaEnUso) {
+      alert('No se puede eliminar el color porque está siendo usado en el lienzo.');
+      return;
+    }
+    
+    // Si no está en uso, procede a eliminarlo
     setColoresGuardados(anteriores => {
       const nuevosColores = { ...anteriores };
       delete nuevosColores[alias];
       return nuevosColores;
     });
   };
-
+  
   const aplicarColorGuardado = (alias) => {
     if (coloresGuardados[alias]) {
       setColor(coloresGuardados[alias]);
