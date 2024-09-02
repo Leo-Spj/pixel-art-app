@@ -10,9 +10,9 @@ import GeneradorCodigo from './components/GeneradorCodigo';
 import { generarCodigoCompleto } from './utils/generadorCodigo';
 
 const EditorArtePixelado = () => {
-  const [anchoLienzo, setAnchoLienzo] = useState(23);
-  const [altoLienzo, setAltoLienzo] = useState(16);
-  const [tamanoCelda, setTamanoCelda] = useState(20);
+  const [anchoLienzo, setAnchoLienzo] = useState(40);
+  const [altoLienzo, setAltoLienzo] = useState(40);
+  const [tamanoCelda, setTamanoCelda] = useState(16);
   const [color, setColor] = useState('#000000');
   const [pixeles, setPixeles] = useState([]);
   const [imagenFondo, setImagenFondo] = useState(null);
