@@ -8,9 +8,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
       // Redondea al par más cercano
       value = anchoLienzo > value ? value - 1 : value + 1;
     }
-    if (value > anchoLienzo) {
-      setAnchoLienzo(value);
-    }
+    setAnchoLienzo(value);
   };
 
   const handleAltoChange = (e) => {
@@ -19,16 +17,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
       // Redondea al par más cercano
       value = altoLienzo > value ? value - 1 : value + 1;
     }
-    if (value > altoLienzo) {
-      setAltoLienzo(value);
-    }
-  };
-
-  const inputStyle = {
-    width: '100px',
-    padding: '0.25rem',
-    borderRadius: '3px',
-    border: '1px solid #ccc'
+    setAltoLienzo(value);
   };
 
   return (
@@ -41,7 +30,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           value={anchoLienzo}
           onChange={handleAnchoChange}
           placeholder="Introduce el ancho"
-          style={inputStyle}
+          style={{ width: '80px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -52,7 +41,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           value={altoLienzo}
           onChange={handleAltoChange}
           placeholder="Introduce el alto"
-          style={inputStyle}
+          style={{ width: '80px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -63,7 +52,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           value={tamanoCelda}
           onChange={(e) => setTamanoCelda(parseInt(e.target.value))}
           placeholder="Introduce el tamaño de la celda"
-          style={inputStyle}
+          style={{ width: '100px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
     </div>
