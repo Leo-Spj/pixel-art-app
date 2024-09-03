@@ -10,9 +10,9 @@ import GeneradorCodigo from './components/GeneradorCodigo';
 import { generarCodigoCompleto } from './utils/generadorCodigo';
 
 const EditorArtePixelado = () => {
-  const [anchoLienzo, setAnchoLienzo] = useState(23);
-  const [altoLienzo, setAltoLienzo] = useState(16);
-  const [tamanoCelda, setTamanoCelda] = useState(20);
+  const [anchoLienzo, setAnchoLienzo] = useState(38);
+  const [altoLienzo, setAltoLienzo] = useState(34);
+  const [tamanoCelda, setTamanoCelda] = useState(18);
   const [color, setColor] = useState('#000000');
   const [pixeles, setPixeles] = useState([]);
   const [imagenFondo, setImagenFondo] = useState(null);
@@ -117,41 +117,67 @@ const EditorArtePixelado = () => {
       padding: '2rem',
       backgroundColor: '#f0f0f0',
       borderRadius: '10px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      position: 'relative'
     }} onContextMenu={(e) => e.preventDefault()}>
-      <h1 style={{ color: '#333', marginBottom: '1rem' }}>Editor de Arte Pixelado</h1>
-      <ControlTamanio
-        anchoLienzo={anchoLienzo}
-        setAnchoLienzo={setAnchoLienzo}
-        altoLienzo={altoLienzo}
-        setAltoLienzo={setAltoLienzo}
-        tamanoCelda={tamanoCelda}
-        setTamanoCelda={setTamanoCelda}
-      />
-      <SelectorColor
-        color={color}
-        setColor={setColor}
-        alias={alias}
-        setAlias={setAlias}
-        guardarColor={guardarColor}
-      />
-      <ColoresGuardados
-        coloresGuardados={coloresGuardados}
-        aplicarColorGuardado={aplicarColorGuardado}
-        eliminarColorGuardado={eliminarColorGuardado}
-      />
-      <SubidorImagen setImagenFondo={setImagenFondo} />
-      {imagenFondo && (
-        <ControlFondo
-          posicionFondo={posicionFondo}
-          setPosicionFondo={setPosicionFondo}
-          escalaFondo={escalaFondo}
-          setEscalaFondo={setEscalaFondo}
-          mostrarFondo={mostrarFondo}
-          setMostrarFondo={setMostrarFondo}
-          imagenFondo={imagenFondo}
+      <div style={{
+        position: 'absolute',
+        top: '10px',
+        left: '10px',
+        zIndex: 1000,
+        backgroundColor: 'white',
+        padding: '1rem',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <ControlTamanio
+          anchoLienzo={anchoLienzo}
+          setAnchoLienzo={setAnchoLienzo}
+          altoLienzo={altoLienzo}
+          setAltoLienzo={setAltoLienzo}
+          tamanoCelda={tamanoCelda}
+          setTamanoCelda={setTamanoCelda}
         />
-      )}
+      </div>
+
+      <h1 style={{ color: '#333', marginBottom: '1rem' }}>PixelArt → OpenGL</h1>
+      
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', marginRight: '20px' }}>
+          <SelectorColor
+            color={color}
+            setColor={setColor}
+            alias={alias}
+            setAlias={setAlias}
+            guardarColor={guardarColor}
+          />
+
+          <ColoresGuardados
+            coloresGuardados={coloresGuardados}
+            aplicarColorGuardado={aplicarColorGuardado}
+            eliminarColorGuardado={eliminarColorGuardado}
+            imagenFondo={imagenFondo}
+          />
+
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <SubidorImagen setImagenFondo={setImagenFondo} />
+          {imagenFondo && (
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <img src={imagenFondo} alt="Previsualización" style={{ width: '210px', height: '225px', objectFit: 'contain', borderRadius: '10px', border: '2px solid #ccc' }} />
+              <ControlFondo
+                posicionFondo={posicionFondo}
+                setPosicionFondo={setPosicionFondo}
+                escalaFondo={escalaFondo}
+                setEscalaFondo={setEscalaFondo}
+                mostrarFondo={mostrarFondo}
+                setMostrarFondo={setMostrarFondo}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+      
       <Lienzo
         anchoLienzo={anchoLienzo}
         altoLienzo={altoLienzo}
@@ -165,6 +191,7 @@ const EditorArtePixelado = () => {
         escalaFondo={escalaFondo}
         mostrarFondo={mostrarFondo}
       />
+      
       <GeneradorCodigo
         coloresGuardados={coloresGuardados}
         pixeles={pixeles}
