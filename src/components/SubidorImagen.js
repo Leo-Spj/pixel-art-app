@@ -15,6 +15,14 @@ const SubidorImagen = ({ setImagenFondo }) => {
     }
   };
 
+  const acortarNombreArchivo = (nombre) => {
+    const limite = 20;
+    if (nombre.length > limite) {
+      return nombre.substring(0, limite) + '...';
+    }
+    return nombre;
+  };
+
   return (
     <div style={{ marginBottom: '0.5rem', marginTop: '8px', marginLeft: '0rem', display: 'flex', alignItems: 'center' }}>
       <input
@@ -41,7 +49,7 @@ const SubidorImagen = ({ setImagenFondo }) => {
         Subir Img
       </label>
       <small style={{ marginLeft: '0.25rem', color: '#6c757d', fontSize: '0.75rem' }}>
-        {nombreArchivo ? nombreArchivo : ''}
+        {nombreArchivo ? acortarNombreArchivo(nombreArchivo) : ''}
       </small>
     </div>
   );
