@@ -4,7 +4,9 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
 
   const handleAnchoChange = (e) => {
     let value = parseInt(e.target.value);
-    if (value % 2 !== 0) {
+    if (value < 0) {
+      value = 0;
+    } else if (value % 2 !== 0) {
       // Redondea al par más cercano
       value = anchoLienzo > value ? value - 1 : value + 1;
     }
@@ -13,11 +15,21 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
 
   const handleAltoChange = (e) => {
     let value = parseInt(e.target.value);
-    if (value % 2 !== 0) {
+    if (value < 0) {
+      value = 0;
+    } else if (value % 2 !== 0) {
       // Redondea al par más cercano
       value = altoLienzo > value ? value - 1 : value + 1;
     }
     setAltoLienzo(value);
+  };
+
+  const handleTamanoCeldaChange = (e) => {
+    let value = parseInt(e.target.value);
+    if (value < 0) {
+      value = 0;
+    }
+    setTamanoCelda(value);
   };
 
   return (
@@ -30,7 +42,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           value={anchoLienzo}
           onChange={handleAnchoChange}
           placeholder="Introduce el ancho"
-          style={{ width: '80px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
+          style={{ width: '120px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -41,7 +53,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           value={altoLienzo}
           onChange={handleAltoChange}
           placeholder="Introduce el alto"
-          style={{ width: '80px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
+          style={{ width: '120px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
@@ -50,9 +62,9 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
           id="tamanoCelda"
           type="number"
           value={tamanoCelda}
-          onChange={(e) => setTamanoCelda(parseInt(e.target.value))}
+          onChange={handleTamanoCeldaChange}
           placeholder="Introduce el tamaño de la celda"
-          style={{ width: '100px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
+          style={{ width: '120px', padding: '0.25rem', borderRadius: '3px', border: '1px solid #ccc' }}
         />
       </div>
     </div>
