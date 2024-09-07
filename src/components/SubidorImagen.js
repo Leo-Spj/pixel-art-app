@@ -46,7 +46,7 @@ const SubidorImagen = ({ setImagenFondo }) => {
         onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5a6268'}
         onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#6c757d'}
       >
-        Subir Img
+        Subir Imagen
       </label>
       <small style={{ marginLeft: '0.25rem', color: '#6c757d', fontSize: '0.75rem' }}>
         {nombreArchivo ? acortarNombreArchivo(nombreArchivo) : ''}

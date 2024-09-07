@@ -7,6 +7,8 @@ import ControlFondo from './components/ControlFondo';
 import Lienzo from './components/Lienzo';
 import GeneradorCodigo from './components/GeneradorCodigo';
 
+import ConversorObjOpenGl from './components/opengl3D/ConversorObjOpenGl';
+
 import { generarCodigoCompleto } from './utils/generadorCodigo';
 
 const EditorArtePixelado = () => {
@@ -26,6 +28,12 @@ const EditorArtePixelado = () => {
   const [estaBorrando, setEstaBorrando] = useState(false);
 
   const [mostrarControlTamanio, setMostrarControlTamanio] = useState(true);
+
+  const [mostrarControlConversor, setMostrarControlConversor] = useState(false);
+
+  const toggleControlConversor = () => {
+    setMostrarControlConversor(!mostrarControlConversor);
+  };
 
   useEffect(() => {
     setPixeles(Array(anchoLienzo * altoLienzo).fill(''));
@@ -177,6 +185,45 @@ const EditorArtePixelado = () => {
                 setTamanoCelda={setTamanoCelda}
               />
             </div>
+
+
+
+            <div>
+      <div style={{
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        zIndex: 1001,
+        cursor: 'pointer',
+        backgroundColor: 'white',
+        padding: '0.5rem',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }} onClick={toggleControlConversor}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="30" height="30">
+          <path fill="#000000" d="M29.5 8.5c8.9-.4 16.4 2.6 22.5 9 1 3-0 5-3 6-8.7-7.8-18.2-9-28.5-3.5-7 6.6-8.8 14.4-5.5 23.5 5.2-2.4 10.5-4.4 16-6 4.5 1.3 8.8 3 13 5 6-9.6 12.2-19.1 18.5-28.5 2.3-.7 4.7-.7 7 0 3.7 5.4 7 11 10 17-1 3-3 4-6 3-1.3-1.4-2.5-2.9-3.5-4.5-.3 11.3-.7 22.7-1 34-2.8 2.9-5.2 2.5-7-1-.3-11-.7-22-1-33-3.2 5.2-6.3 10.3-9.5 15.5 2.6.9 4.8 2.4 6.5 4.5.3 6.7.7 13.3 1 20 2.5 2.2 5.3 3 8.5 2.5 7.3-3.7 14.7-7.3 22-11-3.6-5.4-7.1-10.9-10.5-16.5-.7-5 1.3-6.7 6-5 4.4 7.2 8.6 14.5 12.5 22-.2 1.4-.7 2.8-1.5 4-9.1 5.5-18.6 10.3-28.5 14.5-3.2.5-6-.3-8.5-2.5-.8 2.1-2 3.9-3.5 5.5-8.1 4.4-16.4 8.2-25 11.5-3.4-1.2-6.8-2.7-10-4.5-2.9-3.2-2.4-5.7 1.5-7.5 1.4.8 2.9 1.4 4.5 2 1.2-7.3 1.3-14.6.5-22-4.1-1.8-8.3-3.7-12.5-5.5-.8-2-.1-3.8 0-5.5-.7.3-1.3.7-2 1-.1 8 .7 16 1.5 24 3.2 1.3 4.2 3.7 3 7-4.1 1.6-7.4.6-10-3-.7-10.7-.7-21.3 0-32 1.3-1.1 2.5-2.2 3.5-3.5-4.5-19.4 2.8-31.6 22-36.5zm-1 37c5.2.8 10.2 2.3 15 4.5-4.6 3.1-9.6 4.8-15 5-3.5-1.2-6.8-2.7-10-4.5 3.4-1.7 6.7-3.4 10-5zm22 10c1.2 6.8 1.3 13.8.5 21-5.1 2.8-10.3 5.5-15.5 8-1.2-7.3-1.3-14.6-.5-22 5.2-2.4 10.4-4.8 15.5-7z"/>
+        </svg>
+      </div>
+      <div style={{
+        position: 'absolute',
+        top: '65px',
+        right: '10px',
+        zIndex: 1000,
+        backgroundColor: 'white',
+        padding: '1rem',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        transition: 'opacity 0.3s ease-in-out, visibility 0.3s ease-in-out',
+        visibility: mostrarControlConversor ? 'visible' : 'hidden',
+        opacity: mostrarControlConversor ? 1 : 0,
+        pointerEvents: mostrarControlConversor ? 'auto' : 'none'
+      }}>
+        <ConversorObjOpenGl />
+      </div>
+    </div>
 
       <h1 style={{ color: '#333', marginBottom: '1rem' }}>PixelArt → OpenGL</h1>
       

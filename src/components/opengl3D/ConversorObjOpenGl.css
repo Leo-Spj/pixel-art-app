@@ -1,0 +1,60 @@
+/* .conversor-card {
+    width: 230px;
+    height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  } */
+  
+.conversor-card h2 {
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.conversor-card label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+
+.conversor-card input[type="file"] {
+  width: 100%;
+  font-size: 10px;
+  margin-bottom: 8px;
+}
+
+.conversor-card button {
+  width: 100%;
+  padding: 5px;
+  font-size: 12px;
+  margin-bottom: 8px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.conversor-card button:hover {
+  background-color: #45a049;
+}
+
+.conversor-card textarea {
+  width: 100%;
+  height: 80px;
+  font-size: 10px;
+  margin-bottom: 8px;
+  resize: none;
+}
+
+.conversor-card div:last-child {
+  font-size: 12px;
+  color: #4CAF50;
+  text-align: center;
+}
