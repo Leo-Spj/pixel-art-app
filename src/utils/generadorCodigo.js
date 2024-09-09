@@ -27,12 +27,16 @@ export const generarCodigoCompleto = (coloresGuardados, pixeles, anchoLienzo, al
     const figuraCode = 'void figura() {\n' + pixelCommands.join('\n') + '\n\t}';
   
     return `
-    double escalado = 0.5; // <- MODIFICA para ajustar el TAMAÑO de la figura
-    
-    void draw(){
-        glClearColor(0.9,0.9,0.9,1);
-        figura();
-    }
+public:	
+	
+	void draw(){
+		glClearColor(0.85,0.85,0.85,1);
+		figura();
+	}
+		
+private:
+			
+	double escalado = 0.5; // <- MODIFICA para ajustar el TAMAÑO de la figura
     
     ${enumCode}${switchCode}
     void drawTriangle(double a1, double a2,
