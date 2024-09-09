@@ -39,17 +39,31 @@ const generarCodigoFiguroIo = (setCodigo, archivoObj, archivoMtl) => {
       const materialName = faces[i].material;
       const [r, g, b] = (materials[materialName] || [1.0, 1.0, 1.0]).map(color => color.toFixed(2));
     
-      const vertexA = vertices[faces[i].vertices[0]];
-      const vertexB = vertices[faces[i + 5].vertices[2]];
+      let minVertex = [Infinity, Infinity, Infinity];
+      let maxVertex = [-Infinity, -Infinity, -Infinity];
+    
+      for (let j = 0; j < 6; j++) {
+        const vertex = vertices[faces[i + j].vertices[0]];
+        minVertex = [
+          Math.min(minVertex[0], vertex[0]),
+          Math.min(minVertex[1], vertex[1]),
+          Math.min(minVertex[2], vertex[2])
+        ];
+        maxVertex = [
+          Math.max(maxVertex[0], vertex[0]),
+          Math.max(maxVertex[1], vertex[1]),
+          Math.max(maxVertex[2], vertex[2])
+        ];
+      }
     
       const redondearAlMultiploMasCercano = (num) => (Math.round(num * 4) / 4).toFixed(2); // Redondear a múltiplos de 0.25
     
-      const a1 = redondearAlMultiploMasCercano(vertexA[0] / 128);
-      const a2 = redondearAlMultiploMasCercano(vertexA[1] / 128);
-      const a3 = redondearAlMultiploMasCercano(vertexA[2] / 128);
-      const b1 = redondearAlMultiploMasCercano(vertexB[0] / 128);
-      const b2 = redondearAlMultiploMasCercano(vertexB[1] / 128);
-      const b3 = redondearAlMultiploMasCercano(vertexB[2] / 128);
+      const a1 = redondearAlMultiploMasCercano(minVertex[0] / 128);
+      const a2 = redondearAlMultiploMasCercano(minVertex[1] / 128);
+      const a3 = redondearAlMultiploMasCercano(minVertex[2] / 128);
+      const b1 = redondearAlMultiploMasCercano(maxVertex[0] / 128);
+      const b2 = redondearAlMultiploMasCercano(maxVertex[1] / 128);
+      const b3 = redondearAlMultiploMasCercano(maxVertex[2] / 128);
     
       const funcStr = `cubo3d(${a1}, ${a2}, ${a3}, ${b1}, ${b2}, ${b3}, ${r}, ${g}, ${b});`;
       output.push(funcStr);
