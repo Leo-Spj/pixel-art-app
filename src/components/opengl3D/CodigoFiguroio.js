@@ -38,17 +38,17 @@ const generarCodigoFiguroIo = (setCodigo, archivoObj, archivoMtl) => {
     for (let i = 0; i < faces.length; i += 6) {
       const materialName = faces[i].material;
       const [r, g, b] = materials[materialName] || [1.0, 1.0, 1.0];
-
+    
       const vertexA = vertices[faces[i].vertices[0]];
       const vertexB = vertices[faces[i + 5].vertices[2]];
-
-      const a1 = vertexA[0] || 0;
-      const a2 = vertexA[1] || 0;
-      const a3 = vertexA[2] || 0;
-      const b1 = vertexB[0] || 0;
-      const b2 = vertexB[1] || 0;
-      const b3 = vertexB[2] || 0;
-
+    
+      const a1 = (vertexA[0] / 128).toFixed(2);
+      const a2 = (vertexA[1] / 128).toFixed(2);
+      const a3 = (vertexA[2] / 128).toFixed(2);
+      const b1 = (vertexB[0] / 128).toFixed(2);
+      const b2 = (vertexB[1] / 128).toFixed(2);
+      const b3 = (vertexB[2] / 128).toFixed(2);
+    
       const funcStr = `cubo3d(${a1}, ${a2}, ${a3}, ${b1}, ${b2}, ${b3}, ${r}, ${g}, ${b});`;
       output.push(funcStr);
     }
@@ -65,7 +65,7 @@ public:
 
 private:
 
-  double escalado = 0.037;
+  double escalado = 1;
 
   void background()
   { 
