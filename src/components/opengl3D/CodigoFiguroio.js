@@ -42,12 +42,14 @@ const generarCodigoFiguroIo = (setCodigo, archivoObj, archivoMtl) => {
       const vertexA = vertices[faces[i].vertices[0]];
       const vertexB = vertices[faces[i + 5].vertices[2]];
     
-      const a1 = (vertexA[0] / 128).toFixed(2);
-      const a2 = (vertexA[1] / 128).toFixed(2);
-      const a3 = (vertexA[2] / 128).toFixed(2);
-      const b1 = (vertexB[0] / 128).toFixed(2);
-      const b2 = (vertexB[1] / 128).toFixed(2);
-      const b3 = (vertexB[2] / 128).toFixed(2);
+      const redondearAlMultiploMasCercano = (num) => (Math.round(num * 4) / 4).toFixed(2); // Redondear a múltiplos de 0.25
+    
+      const a1 = redondearAlMultiploMasCercano(vertexA[0] / 128);
+      const a2 = redondearAlMultiploMasCercano(vertexA[1] / 128);
+      const a3 = redondearAlMultiploMasCercano(vertexA[2] / 128);
+      const b1 = redondearAlMultiploMasCercano(vertexB[0] / 128);
+      const b2 = redondearAlMultiploMasCercano(vertexB[1] / 128);
+      const b3 = redondearAlMultiploMasCercano(vertexB[2] / 128);
     
       const funcStr = `cubo3d(${a1}, ${a2}, ${a3}, ${b1}, ${b2}, ${b3}, ${r}, ${g}, ${b});`;
       output.push(funcStr);
