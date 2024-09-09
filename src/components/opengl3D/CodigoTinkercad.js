@@ -39,6 +39,8 @@ export const parsearArchivoMtl_Tinkercad = (contenidoMtl) => {
 
 export const generarCodigoOpenGL_Tinkercad = (obj, materiales) => {
   let codigo = `
+public:
+
 void draw()
 {
     camera();
