@@ -81,34 +81,36 @@ public:
 
 private:
 
-  double escalado = 1;
-
+  double escalado = 1.3;
+		
   void background()
   { 
     glClearColor(0,0,0,1);
   }   
-
+  
   void camera()
   {
     double ca;
-    ca = 40*seconds();
-    glRotated(30,1,0,0);
-    glRotated(ca, 0,1,0);
+    ca = 40 * seconds();
+    glRotated(30, 1, 0, 0);
+    glRotated(ca, 0, 1, 0);
   }
-
-  void triangulo3d(double x1, double y1, double z1, 
-                   double x2, double y2, double z2, 
-                   double x3, double y3, double z3, 
-                   double r, double g, double b) 
+  
+  void rectangulo3d(double x1, double y1, double z1, 
+            double x2, double y2, double z2, 
+            double x3, double y3, double z3, 
+            double x4, double y4, double z4, 
+            double r, double g, double b) 
   {
     glColor3d(r, g, b);
-    glBegin(GL_TRIANGLES);
-      glVertex3d(x1*escalado, y1*escalado, z1*escalado);
-      glVertex3d(x2*escalado, y2*escalado, z2*escalado);
-      glVertex3d(x3*escalado, y3*escalado, z3*escalado);
+    glBegin(GL_QUADS);
+    glVertex3d(x1 * escalado, y1 * escalado, z1 * escalado);
+    glVertex3d(x2 * escalado, y2 * escalado, z2 * escalado);
+    glVertex3d(x3 * escalado, y3 * escalado, z3 * escalado);
+    glVertex3d(x4 * escalado, y4 * escalado, z4 * escalado);
     glEnd();
   }
-
+  
   void cubo3d(double x1, double y1, double z1, double x7, double y7, double z7, double r, double g, double b) 
   {
     double x2 = x7; double y2 = y1; double z2 = z1;
@@ -119,23 +121,13 @@ private:
     double x6 = x7; double y6 = y1; double z6 = z7;
     double x8 = x1; double y8 = y7; double z8 = z7;
     
-    triangulo3d(x1, y1, z1, x2, y2, z2, x3, y3, z3, r, g, b);
-    triangulo3d(x1, y1, z1, x3, y3, z3, x4, y4, z4, r, g, b);
     
-    triangulo3d(x1, y1, z1, x2, y2, z2, x5, y5, z5, r, g, b);
-    triangulo3d(x5, y5, z5, x6, y6, z6, x2, y2, z2, r, g, b);
-    
-    triangulo3d(x2, y2, z2, x3, y3, z3, x6, y6, z6, r, g, b);
-    triangulo3d(x6, y6, z6, x7, y7, z7, x3, y3, z3, r, g, b);
-    
-    triangulo3d(x3, y3, z3, x4, y4, z4, x8, y8, z8, r, g, b);
-    triangulo3d(x3, y3, z3, x8, y8, z8, x7, y7, z7, r, g, b);
-    
-    triangulo3d(x1, y1, z1, x5, y5, z5, x8, y8, z8, r, g, b);
-    triangulo3d(x1, y1, z1, x8, y8, z8, x4, y4, z4, r, g, b);
-    
-    triangulo3d(x5, y5, z5, x6, y6, z6, x8, y8, z8, r, g, b);
-    triangulo3d(x6, y6, z6, x7, y7, z7, x8, y8, z8, r, g, b);
+    rectangulo3d(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, r, g, b); // Frente
+    rectangulo3d(x5, y5, z5, x6, y6, z6, x7, y7, z7, x8, y8, z8, r, g, b); // Atrás
+    rectangulo3d(x1, y1, z1, x5, y5, z5, x8, y8, z8, x4, y4, z4, r, g, b); // Izquierda
+    rectangulo3d(x2, y2, z2, x6, y6, z6, x7, y7, z7, x3, y3, z3, r, g, b); // Derecha
+    rectangulo3d(x4, y4, z4, x3, y3, z3, x7, y7, z7, x8, y8, z8, r, g, b); // Arriba
+    rectangulo3d(x1, y1, z1, x2, y2, z2, x6, y6, z6, x5, y5, z5, r, g, b); // Abajo
   }
 
   void figura()
