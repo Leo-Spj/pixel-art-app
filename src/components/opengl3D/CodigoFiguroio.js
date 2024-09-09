@@ -37,7 +37,7 @@ const generarCodigoFiguroIo = (setCodigo, archivoObj, archivoMtl) => {
 
     for (let i = 0; i < faces.length; i += 6) {
       const materialName = faces[i].material;
-      const [r, g, b] = materials[materialName] || [1.0, 1.0, 1.0];
+      const [r, g, b] = (materials[materialName] || [1.0, 1.0, 1.0]).map(color => color.toFixed(2));
     
       const vertexA = vertices[faces[i].vertices[0]];
       const vertexB = vertices[faces[i + 5].vertices[2]];
