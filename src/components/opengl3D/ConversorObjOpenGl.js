@@ -4,6 +4,7 @@ import GenerarCodigo from './GenerarCodigo';
 import MostrarCodigo from './MostrarCodigo';
 import { parsearArchivoObj_Tinkercad, parsearArchivoMtl_Tinkercad, generarCodigoOpenGL_Tinkercad } from './CodigoTinkercad';
 import { parsearArchivoObj_FiguroIo, parsearArchivoMtl_FiguroIo, generarCodigoOpenGL_FiguroIo } from './CodigoFiguroio';
+import generarCodigoFiguroIo from './CodigoFiguroio';
 import './ConversorObjOpenGl.css';
 
 const ConversorObjOpenGl = () => {
@@ -26,10 +27,7 @@ const ConversorObjOpenGl = () => {
     setCodigo(codigo);
   };
 
-  const generarCodigoFiguroIo = () => {
-    // TODO
-    setCodigo("test");
-  };
+  
 
 
   const copiarAlPortapapeles = () => {
@@ -47,7 +45,10 @@ const ConversorObjOpenGl = () => {
       <CargarArchivo etiqueta="Subir OBJ:" aceptar=".obj" manejarCarga={(e) => manejarCargaArchivo(e, setArchivoObj)} />
       <CargarArchivo etiqueta="Subir MTL:" aceptar=".mtl" manejarCarga={(e) => manejarCargaArchivo(e, setArchivoMtl)} />
       <GenerarCodigo generarCodigo={generarCodigoTinkercad} nombre="Tinkercad" />
-      <GenerarCodigo generarCodigo={generarCodigoFiguroIo} nombre="Figuro.io" />
+      <GenerarCodigo
+        generarCodigo={() => generarCodigoFiguroIo(setCodigo, archivoObj, archivoMtl)}
+        nombre="Figuro.io"
+      />
       <MostrarCodigo codigo={codigo} copiarAlPortapapeles={copiarAlPortapapeles} exitoCopia={exitoCopia} />
     </div>
   );
