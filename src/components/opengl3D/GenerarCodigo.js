@@ -1,7 +1,7 @@
 import React from 'react';
 
-const GenerarCodigo = ({ generarCodigo }) => (
-  <button onClick={generarCodigo}>Generar Código OpenGL</button>
+const GenerarCodigo = ({ generarCodigo, nombre }) => (
+  <button onClick={generarCodigo}>Generar de {nombre}</button>
 );
 
 export default GenerarCodigo;
