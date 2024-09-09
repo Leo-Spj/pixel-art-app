@@ -81,7 +81,7 @@ public:
 
 private:
 
-  double escalado = 1.3;
+  double escalado = 1.75;
 		
   void background()
   { 
@@ -90,6 +90,8 @@ private:
   
   void camera()
   {
+    glTranslated(0.0, -10.0, -10.0);
+    
     double ca;
     ca = 40 * seconds();
     glRotated(30, 1, 0, 0);
