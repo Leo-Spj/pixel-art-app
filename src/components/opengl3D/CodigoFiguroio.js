@@ -65,7 +65,7 @@ const generarCodigoFiguroIo = (setCodigo, archivoObj, archivoMtl) => {
       const b2 = redondearAlMultiploMasCercano(maxVertex[1] / 128);
       const b3 = redondearAlMultiploMasCercano(maxVertex[2] / 128);
     
-      const funcStr = `cubo3d(${a1}, ${a2}, ${a3}, ${b1}, ${b2}, ${b3}, ${r}, ${g}, ${b});`;
+      const funcStr = `cubo3d(${a1}, ${a2}, ${a3},\t ${b1}, ${b2}, ${b3},\t ${r}, ${g}, ${b});`;
       output.push(funcStr);
     }
 
@@ -124,12 +124,12 @@ private:
     double x8 = x1; double y8 = y7; double z8 = z7;
     
     
-    rectangulo3d(x1, y1, z1,\t x2, y2, z2, x3, y3, z3, x4, y4, z4,\t r, g, b); // Frente
-    rectangulo3d(x5, y5, z5,\t x6, y6, z6, x7, y7, z7, x8, y8, z8,\t r, g, b); // Atrás
-    rectangulo3d(x1, y1, z1,\t x5, y5, z5, x8, y8, z8, x4, y4, z4,\t r, g, b); // Izquierda
-    rectangulo3d(x2, y2, z2,\t x6, y6, z6, x7, y7, z7, x3, y3, z3,\t r, g, b); // Derecha
-    rectangulo3d(x4, y4, z4,\t x3, y3, z3, x7, y7, z7, x8, y8, z8,\t r, g, b); // Arriba
-    rectangulo3d(x1, y1, z1,\t x2, y2, z2, x6, y6, z6, x5, y5, z5,\t r, g, b); // Abajo
+    rectangulo3d(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, r, g, b); // Frente
+    rectangulo3d(x5, y5, z5, x6, y6, z6, x7, y7, z7, x8, y8, z8, r, g, b); // Atrás
+    rectangulo3d(x1, y1, z1, x5, y5, z5, x8, y8, z8, x4, y4, z4, r, g, b); // Izquierda
+    rectangulo3d(x2, y2, z2, x6, y6, z6, x7, y7, z7, x3, y3, z3, r, g, b); // Derecha
+    rectangulo3d(x4, y4, z4, x3, y3, z3, x7, y7, z7, x8, y8, z8, r, g, b); // Arriba
+    rectangulo3d(x1, y1, z1, x2, y2, z2, x6, y6, z6, x5, y5, z5, r, g, b); // Abajo
   }
 
   void figura()
