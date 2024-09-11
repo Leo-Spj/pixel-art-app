@@ -161,6 +161,7 @@ const EditorArtePixelado = () => {
             alias={alias}
             setAlias={setAlias}
             guardarColor={guardarColor}
+            coloresGuardados={coloresGuardados}
           />
       
           <ColoresGuardados
