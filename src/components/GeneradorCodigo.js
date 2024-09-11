@@ -16,7 +16,7 @@ const GeneradorCodigo = ({ coloresGuardados, pixeles, anchoLienzo, altoLienzo, g
       border: 'none',
       borderRadius: '5px',
       cursor: 'pointer'
-    }}>Copiar al portapapeles</button>
+    }}>Copiar para OpenGL</button>
   );
 };
 

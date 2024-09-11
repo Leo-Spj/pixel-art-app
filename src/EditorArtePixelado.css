@@ -1,0 +1,110 @@
+/* EditorArtePixelado.css */
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-height: 100vh;
+}
+
+.control-tamanio-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  cursor: pointer;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-tamanio-container {
+  position: absolute;
+  top: 55px;
+  left: 10px;
+  z-index: 1000;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out;
+}
+
+.control-conversor-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1001;
+  cursor: pointer;
+  background-color: white;
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-conversor-container {
+  position: absolute;
+  top: 65px;
+  right: 10px;
+  z-index: 1000;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.flex-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.image-preview {
+  width: 210px;
+  height: 225px;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+}

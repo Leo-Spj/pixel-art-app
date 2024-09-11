@@ -1,6 +1,6 @@
 import { calcularCoordenadas } from './coordenadas';
 
-export const generarCodigoCompleto = (coloresGuardados, pixeles, anchoLienzo, altoLienzo) => {
+export const generadorCodigoPixelOpenGl = (coloresGuardados, pixeles, anchoLienzo, altoLienzo) => {
     let enumCode = 'enum Color { ';
     let switchCode = '\tvoid pintarColor(Color color) {\n\t\tswitch(color) {\n';
     
