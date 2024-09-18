@@ -130,6 +130,7 @@ const EditorArtePixelado = () => {
   };
 
   return (
+    
     <div className="editor-container" onContextMenu={(e) => e.preventDefault()}>
       <div className="control-tamanio-toggle" onClick={toggleControlTamanio}>
           <img src={IconoConfigLienzo} alt="Icono" />
@@ -145,6 +146,13 @@ const EditorArtePixelado = () => {
         />
       </div>
 
+      <div>
+        <a href="https://github.com/Leo-Spj/pixel-art-app" class="github-button" target="_blank">
+          GitHub
+        </a>
+      </div>
+
+
       <div className="control-conversor-toggle" onClick={toggleControlConversor}>
         <img src={IconoEstructuras3D} alt="Icono Estructuras 3D" />
       </div>
@@ -152,7 +160,7 @@ const EditorArtePixelado = () => {
         <ConversorObjOpenGl />
       </div>
       
-      <h1 className="header">PixelArt → OpenGL</h1>
+      <h1 className="header">PixelArt</h1>
       
       <div className="flex-container">
         <div className="flex-column">

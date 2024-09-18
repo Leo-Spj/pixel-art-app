@@ -1,3 +1,18 @@
+.github-button {
+  display: inline-block;
+  background-color: #24292e; /* Color de fondo de GitHub */
+  color: #ffffff; /* Color de texto blanco */
+  text-decoration: none; /* Sin subrayado */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.github-button:hover {
+  background-color: #444d56; /* Color de fondo al pasar el ratón */
+}
+
 /* EditorArtePixelado.css */
 
 .editor-container {
