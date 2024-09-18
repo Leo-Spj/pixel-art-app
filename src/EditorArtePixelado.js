@@ -7,7 +7,7 @@ import ControlFondo from './components/ControlFondo';
 import Lienzo from './components/Lienzo';
 import GeneradorCodigo from './components/GeneradorCodigo';
 import ConversorObjOpenGl from './components/opengl3D/ConversorObjOpenGl';
-import { generadorCodigoPixelMiniwin } from './utils/generadorCodigoPixelMiniWin';
+import {generadorCodigoPixelMiniWin} from './utils/generadorCodigoPixelMiniWin';
 import { generadorCodigoPixelOpenGl } from './utils/generadorCodigoPixelOpenGl';
 import './EditorArtePixelado.css';
 import IconoConfigLienzo from './ConfigLienzo.svg';

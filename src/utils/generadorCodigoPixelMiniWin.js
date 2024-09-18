@@ -4,7 +4,7 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
     let colorFunctions = '';
     let drawCommands = '';
 
-    Object.entries(coloresGuardados).forEach(([alias, colorHex], index) => {
+    Object.entries(coloresGuardados).forEach(([alias, colorHex]) => {
         const r = parseInt(colorHex.slice(1, 3), 16);
         const g = parseInt(colorHex.slice(3, 5), 16);
         const b = parseInt(colorHex.slice(5, 7), 16);
@@ -16,9 +16,13 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
 
     const pixelCommands = pixeles.map((colorPixel, indice) => {
         if (colorPixel) {
-            const { x, y } = calcularCoordenadas(indice, anchoLienzo, altoLienzo);
+            const x = indice % anchoLienzo;
+            const y = Math.floor(indice / anchoLienzo);
+            // Ajustamos las coordenadas para corregir la orientación
+            const xAjustado = x;
+            const yAjustado = altoLienzo - 1 - y; // Invertimos Y para que comience desde abajo
             const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
-            return `    dibujaCuadrado(${x * 20}, ${y * 20}, 20, '${aliasActual}', 'N');`;
+            return `    dibujaCuadrado(${xAjustado * 10}, ${yAjustado * 10}, 10, '${aliasActual}', 'N');`;
         }
         return null;
     }).filter(Boolean);
@@ -46,7 +50,7 @@ void dibujaCuadrado(int x, int y, int tamano, char colorRelleno, char colorBorde
 }
 
 int main() {
-    vredimensiona(${anchoLienzo * 20}, ${altoLienzo * 20});
+    vredimensiona(${anchoLienzo * 10}, ${altoLienzo * 10});
 
     // Dibujando
 ${drawCommands}
