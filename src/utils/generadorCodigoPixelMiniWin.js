@@ -20,7 +20,7 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
             const y = Math.floor(indice / anchoLienzo);
             // Ajustamos las coordenadas para corregir la orientación
             const xAjustado = x;
-            const yAjustado = altoLienzo - 1 - y; // Invertimos Y para que comience desde abajo
+            const yAjustado = y; // Eliminamos la inversión de Y
             const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
             return `    dibujaCuadrado(${xAjustado * 10}, ${yAjustado * 10}, 10, '${aliasActual}', 'N');`;
         }
