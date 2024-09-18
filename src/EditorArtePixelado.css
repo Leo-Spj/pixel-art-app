@@ -13,6 +13,84 @@
   background-color: #444d56; /* Color de fondo al pasar el ratón */
 }
 
+/* Guardado de lienzos*/
+
+.nombre-lienzo-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.guardar-lienzo-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.guardar-lienzo-btn:hover {
+  background-color: #45a049;
+}
+
+.carrusel-lienzos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lienzo-item {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+}
+
+.lienzo-nombre {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.cargar-lienzo-btn,
+.eliminar-lienzo-btn {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cargar-lienzo-btn {
+  background-color: #008CBA;
+  color: white;
+}
+
+.cargar-lienzo-btn:hover {
+  background-color: #007bb5;
+}
+
+.eliminar-lienzo-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.eliminar-lienzo-btn:hover {
+  background-color: #da190b;
+}
+
 /* EditorArtePixelado.css */
 
 .editor-container {

@@ -7,12 +7,12 @@ import ControlFondo from './components/ControlFondo';
 import Lienzo from './components/Lienzo';
 import GeneradorCodigo from './components/GeneradorCodigo';
 import ConversorObjOpenGl from './components/opengl3D/ConversorObjOpenGl';
-import {generadorCodigoPixelMiniWin} from './utils/generadorCodigoPixelMiniWin';
+import { generadorCodigoPixelMiniWin } from './utils/generadorCodigoPixelMiniWin';
 import { generadorCodigoPixelOpenGl } from './utils/generadorCodigoPixelOpenGl';
 import './EditorArtePixelado.css';
 import IconoConfigLienzo from './ConfigLienzo.svg';
 import IconoEstructuras3D from './IconoEstructuras3D.svg';
-
+import { guardarLienzo, cargarLienzo, eliminarLienzo, obtenerLienzos } from './lienzoStorage'; // Importar las funciones
 
 const EditorArtePixelado = () => {
   const [anchoLienzo, setAnchoLienzo] = useState(36);
@@ -30,6 +30,8 @@ const EditorArtePixelado = () => {
   const [estaBorrando, setEstaBorrando] = useState(false);
   const [mostrarControlTamanio, setMostrarControlTamanio] = useState(true);
   const [mostrarControlConversor, setMostrarControlConversor] = useState(false);
+  const [nombreLienzo, setNombreLienzo] = useState('');
+  const [lienzosGuardados, setLienzosGuardados] = useState([]);
 
   const toggleControlConversor = () => {
     setMostrarControlConversor(!mostrarControlConversor);
@@ -44,6 +46,10 @@ const EditorArtePixelado = () => {
       setMostrarControlTamanio(false);
     }, 1500);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    setLienzosGuardados(obtenerLienzos());
   }, []);
 
   const toggleControlTamanio = () => {
@@ -129,8 +135,57 @@ const EditorArtePixelado = () => {
     }
   };
 
+  const manejarGuardarLienzo = () => {
+    if (!nombreLienzo) {
+      alert('Por favor, ingrese un nombre para el lienzo.');
+      return;
+    }
+    guardarLienzo(nombreLienzo, coloresGuardados, pixeles, anchoLienzo, altoLienzo, tamanoCelda, imagenFondo, posicionFondo, escalaFondo, mostrarFondo);
+    setLienzosGuardados(obtenerLienzos());
+  };
+
+  const manejarCargarLienzo = (nombre) => {
+    cargarLienzo(nombre, setColoresGuardados, setPixeles, setAnchoLienzo, setAltoLienzo, setTamanoCelda, setImagenFondo, setPosicionFondo, setEscalaFondo, setMostrarFondo, anchoLienzo, altoLienzo);
+  };
+
+  const manejarEliminarLienzo = (nombre) => {
+    eliminarLienzo(nombre);
+    setLienzosGuardados(obtenerLienzos());
+  };
+
+  const desplazarDibujo = (direccion) => {
+    setPixeles((pixelesAnteriores) => {
+      const nuevosPixeles = Array(anchoLienzo * altoLienzo).fill('');
+      if (direccion === 'arriba') {
+        for (let y = 1; y < altoLienzo; y++) {
+          for (let x = 0; x < anchoLienzo; x++) {
+            nuevosPixeles[(y - 1) * anchoLienzo + x] = pixelesAnteriores[y * anchoLienzo + x];
+          }
+        }
+      } else if (direccion === 'abajo') {
+        for (let y = 0; y < altoLienzo - 1; y++) {
+          for (let x = 0; x < anchoLienzo; x++) {
+            nuevosPixeles[(y + 1) * anchoLienzo + x] = pixelesAnteriores[y * anchoLienzo + x];
+          }
+        }
+      } else if (direccion === 'izquierda') {
+        for (let y = 0; y < altoLienzo; y++) {
+          for (let x = 1; x < anchoLienzo; x++) {
+            nuevosPixeles[y * anchoLienzo + (x - 1)] = pixelesAnteriores[y * anchoLienzo + x];
+          }
+        }
+      } else if (direccion === 'derecha') {
+        for (let y = 0; y < altoLienzo; y++) {
+          for (let x = 0; x < anchoLienzo - 1; x++) {
+            nuevosPixeles[y * anchoLienzo + (x + 1)] = pixelesAnteriores[y * anchoLienzo + x];
+          }
+        }
+      }
+      return nuevosPixeles;
+    });
+  };
+
   return (
-    
     <div className="editor-container" onContextMenu={(e) => e.preventDefault()}>
       <div className="control-tamanio-toggle" onClick={toggleControlTamanio}>
           <img src={IconoConfigLienzo} alt="Icono" />
@@ -151,7 +206,6 @@ const EditorArtePixelado = () => {
           GitHub
         </a>
       </div>
-
 
       <div className="control-conversor-toggle" onClick={toggleControlConversor}>
         <img src={IconoEstructuras3D} alt="Icono Estructuras 3D" />
@@ -210,6 +264,13 @@ const EditorArtePixelado = () => {
         escalaFondo={escalaFondo}
         mostrarFondo={mostrarFondo}
       />
+
+      <div className="botones-desplazamiento">
+        <button onClick={() => desplazarDibujo('arriba')}>Arriba</button>
+        <button onClick={() => desplazarDibujo('izquierda')}>Izquierda</button>
+        <button onClick={() => desplazarDibujo('derecha')}>Derecha</button>
+        <button onClick={() => desplazarDibujo('abajo')}>Abajo</button>
+      </div>
       
       <GeneradorCodigo
         coloresGuardados={coloresGuardados}
@@ -229,7 +290,24 @@ const EditorArtePixelado = () => {
         nombre={"Generar para MiniWin"}
       />
 
+      <input
+        type="text"
+        className="nombre-lienzo-input"
+        placeholder="Nombre del lienzo"
+        value={nombreLienzo}
+        onChange={(e) => setNombreLienzo(e.target.value)}
+      />
+      <button className="guardar-lienzo-btn" onClick={manejarGuardarLienzo}>Guardar Lienzo</button>
       
+      <div className="carrusel-lienzos">
+        {lienzosGuardados.map((lienzo, index) => (
+          <div key={index} className="lienzo-item">
+            <span className="lienzo-nombre">{lienzo.nombre}</span>
+            <button className="cargar-lienzo-btn" onClick={() => manejarCargarLienzo(lienzo.nombre)}>Cargar</button>
+            <button className="eliminar-lienzo-btn" onClick={() => manejarEliminarLienzo(lienzo.nombre)}>Eliminar</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

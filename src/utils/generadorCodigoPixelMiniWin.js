@@ -20,7 +20,7 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
             const y = Math.floor(indice / anchoLienzo);
             // Ajustamos las coordenadas para corregir la orientación
             const xAjustado = x;
-            const yAjustado = y; // Eliminamos la inversión de Y
+            const yAjustado = y;
             const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
             return `    dibujaCuadrado(${xAjustado}, ${yAjustado} , "${aliasActual}");`;
         }
@@ -48,7 +48,7 @@ void dibujaCuadrado(int a, int b, const string& colorRelleno) {
     colores(colorRelleno);
     rectangulo_lleno(x, y, x + escalado, y + escalado);
     if (pintarBorde) {
-        color_rgb(100, 100, 100); // <-------------------- Color blomo para el borde
+        color_rgb(100, 100, 100); // <-------------------- Color plomo para el borde
         linea(x, y, x, y + escalado);
         linea(x, y + escalado, x + escalado, y + escalado);
         linea(x + escalado, y + escalado, x + escalado, y);
