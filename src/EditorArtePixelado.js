@@ -7,6 +7,7 @@ import ControlFondo from './components/ControlFondo';
 import Lienzo from './components/Lienzo';
 import GeneradorCodigo from './components/GeneradorCodigo';
 import ConversorObjOpenGl from './components/opengl3D/ConversorObjOpenGl';
+import { generadorCodigoPixelMiniwin } from './utils/generadorCodigoPixelMiniWin';
 import { generadorCodigoPixelOpenGl } from './utils/generadorCodigoPixelOpenGl';
 import './EditorArtePixelado.css';
 import IconoConfigLienzo from './ConfigLienzo.svg';
@@ -208,7 +209,19 @@ const EditorArtePixelado = () => {
         anchoLienzo={anchoLienzo}
         altoLienzo={altoLienzo}
         generarCodigoCompleto={generadorCodigoPixelOpenGl}
+        nombre={"Generar para OpenGL"}
       />
+
+      <GeneradorCodigo
+        coloresGuardados={coloresGuardados}
+        pixeles={pixeles}
+        anchoLienzo={anchoLienzo}
+        altoLienzo={altoLienzo}
+        generarCodigoCompleto={generadorCodigoPixelMiniWin}
+        nombre={"Generar para MiniWin"}
+      />
+
+      
     </div>
   );
 };

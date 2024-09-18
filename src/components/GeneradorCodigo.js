@@ -1,6 +1,6 @@
 import React from 'react';
 
-const GeneradorCodigo = ({ coloresGuardados, pixeles, anchoLienzo, altoLienzo, generarCodigoCompleto }) => {
+const GeneradorCodigo = ({ coloresGuardados, pixeles, anchoLienzo, altoLienzo, generarCodigoCompleto, nombre }) => {
   const copiarAlPortapapeles = () => {
     const codigoCompleto = generarCodigoCompleto(coloresGuardados, pixeles, anchoLienzo, altoLienzo);
     navigator.clipboard.writeText(codigoCompleto)
@@ -16,7 +16,7 @@ const GeneradorCodigo = ({ coloresGuardados, pixeles, anchoLienzo, altoLienzo, g
       border: 'none',
       borderRadius: '5px',
       cursor: 'pointer'
-    }}>Copiar para OpenGL</button>
+    }}>{nombre}</button>
   );
 };
 
