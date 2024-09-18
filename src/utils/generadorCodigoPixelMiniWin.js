@@ -9,9 +9,9 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
         const g = parseInt(colorHex.slice(3, 5), 16);
         const b = parseInt(colorHex.slice(5, 7), 16);
         colorFunctions += `
-        case '${alias}':
+        if (color == "${alias}") {
             color_rgb(${r}, ${g}, ${b});
-            break;`;
+        }`;
     });
 
     const pixelCommands = pixeles.map((colorPixel, indice) => {
@@ -22,7 +22,7 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
             const xAjustado = x;
             const yAjustado = y; // Eliminamos la inversión de Y
             const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
-            return `    dibujaCuadrado(${xAjustado * 10}, ${yAjustado * 10}, 10, '${aliasActual}', 'N');`;
+            return `    dibujaCuadrado(${xAjustado * 10}, ${yAjustado * 10}, 10, "${aliasActual}", "N");`;
         }
         return null;
     }).filter(Boolean);
@@ -31,15 +31,15 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
 
     return `
 #include "miniwin.h"
+#include <string>
 
 using namespace miniwin;
+using namespace std;
 
-void colores(char choice) {
-    switch (choice) {${colorFunctions}
-    }
+void colores(const string& color) {${colorFunctions}
 }
 
-void dibujaCuadrado(int x, int y, int tamano, char colorRelleno, char colorBorde) {
+void dibujaCuadrado(int x, int y, int tamano, const string& colorRelleno, const string& colorBorde) {
     colores(colorRelleno);
     rectangulo_lleno(x, y, x + tamano, y + tamano);
     colores(colorBorde);
