@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/pixel-art-app/static/css/main.9086c127.css",
-    "main.js": "/pixel-art-app/static/js/main.b08c9b83.js",
+    "main.css": "/pixel-art-app/static/css/main.4466445f.css",
+    "main.js": "/pixel-art-app/static/js/main.45f50f48.js",
     "static/js/453.6b839398.chunk.js": "/pixel-art-app/static/js/453.6b839398.chunk.js",
+    "static/media/ConfigLienzo.svg": "/pixel-art-app/static/media/ConfigLienzo.5971b85dccea95c6b6fcbf69be9d2a1b.svg",
+    "static/media/IconoEstructuras3D.svg": "/pixel-art-app/static/media/IconoEstructuras3D.339936092fe42232a2612a3d709470ef.svg",
     "index.html": "/pixel-art-app/index.html",
-    "main.9086c127.css.map": "/pixel-art-app/static/css/main.9086c127.css.map",
-    "main.b08c9b83.js.map": "/pixel-art-app/static/js/main.b08c9b83.js.map",
+    "main.4466445f.css.map": "/pixel-art-app/static/css/main.4466445f.css.map",
+    "main.45f50f48.js.map": "/pixel-art-app/static/js/main.45f50f48.js.map",
     "453.6b839398.chunk.js.map": "/pixel-art-app/static/js/453.6b839398.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9086c127.css",
-    "static/js/main.b08c9b83.js"
+    "static/css/main.4466445f.css",
+    "static/js/main.45f50f48.js"
   ]
 }
