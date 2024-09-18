@@ -22,7 +22,7 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
             const xAjustado = x;
             const yAjustado = y; // Eliminamos la inversión de Y
             const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
-            return `    dibujaCuadrado(${xAjustado * 10}, ${yAjustado * 10}, 10, "${aliasActual}", "N");`;
+            return `    dibujaCuadrado(${xAjustado} * escalado, ${yAjustado} * escalado, "${aliasActual}");`;
         }
         return null;
     }).filter(Boolean);
@@ -36,21 +36,26 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
 using namespace miniwin;
 using namespace std;
 
+const int escalado = 10;  // <-------------------- Escalado de los cuadrados
+const bool pintarBorde = false; // <-------------------- Pintar borde de los cuadrados
+
 void colores(const string& color) {${colorFunctions}
 }
 
-void dibujaCuadrado(int x, int y, int tamano, const string& colorRelleno, const string& colorBorde) {
+void dibujaCuadrado(int x, int y, const string& colorRelleno) {
     colores(colorRelleno);
-    rectangulo_lleno(x, y, x + tamano, y + tamano);
-    colores(colorBorde);
-    linea(x, y, x, y + tamano);
-    linea(x, y + tamano, x + tamano, y + tamano);
-    linea(x + tamano, y + tamano, x + tamano, y);
-    linea(x + tamano, y, x, y);
+    rectangulo_lleno(x, y, x + escalado, y + escalado);
+    if (pintarBorde) {
+        color_rgb(0, 0, 0); // <-------------------- Color negro para el borde
+        linea(x, y, x, y + escalado);
+        linea(x, y + escalado, x + escalado, y + escalado);
+        linea(x + escalado, y + escalado, x + escalado, y);
+        linea(x + escalado, y, x, y);
+    }
 }
 
 int main() {
-    vredimensiona(${anchoLienzo * 10}, ${altoLienzo * 10});
+    vredimensiona(${anchoLienzo} * escalado, ${altoLienzo} * escalado);
 
     // Dibujando
 ${drawCommands}
