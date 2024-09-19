@@ -23,17 +23,19 @@ export const cargarLienzo = (nombre, setColoresGuardados, setPixeles, setAnchoLi
   if (lienzo) {
     setColoresGuardados(lienzo.coloresGuardados);
     
+    // Ajustar las dimensiones del lienzo
+    setAnchoLienzo(lienzo.anchoLienzo);
+    setAltoLienzo(lienzo.altoLienzo);
+
     // Ajustar los píxeles a las nuevas dimensiones
-    const nuevosPixeles = Array(anchoLienzoActual * altoLienzoActual).fill('');
-    for (let y = 0; y < Math.min(altoLienzoActual, lienzo.altoLienzo); y++) {
-      for (let x = 0; x < Math.min(anchoLienzoActual, lienzo.anchoLienzo); x++) {
-        nuevosPixeles[y * anchoLienzoActual + x] = lienzo.pixeles[y * lienzo.anchoLienzo + x];
+    const nuevosPixeles = Array(lienzo.anchoLienzo * lienzo.altoLienzo).fill('');
+    for (let y = 0; y < Math.min(lienzo.altoLienzo, altoLienzoActual); y++) {
+      for (let x = 0; x < Math.min(lienzo.anchoLienzo, anchoLienzoActual); x++) {
+        nuevosPixeles[y * lienzo.anchoLienzo + x] = lienzo.pixeles[y * lienzo.anchoLienzo + x];
       }
     }
     setPixeles(nuevosPixeles);
 
-    setAnchoLienzo(anchoLienzoActual);
-    setAltoLienzo(altoLienzoActual);
     setTamanoCelda(lienzo.tamanoCelda);
     setImagenFondo(lienzo.imagenFondo);
     setPosicionFondo(lienzo.posicionFondo);

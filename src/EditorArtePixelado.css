@@ -1,3 +1,46 @@
+.grid-desplazamiento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.boton-invisible {
+  visibility: hidden;
+}
+
+
+
+.contenedor-principal {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.sector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sector-copiado{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.carrusel-lienzos {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lienzo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .github-button {
   display: inline-block;
   background-color: #24292e; /* Color de fondo de GitHub */
@@ -16,8 +59,8 @@
 /* Guardado de lienzos*/
 
 .nombre-lienzo-input {
-  width: 100%;
-  padding: 10px;
+  width: 95%;
+  padding: 6px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;

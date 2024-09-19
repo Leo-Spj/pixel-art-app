@@ -265,39 +265,52 @@ const EditorArtePixelado = () => {
         mostrarFondo={mostrarFondo}
       />
 
-      <div className="botones-desplazamiento">
-        <button onClick={() => desplazarDibujo('arriba')}>Arriba</button>
-        <button onClick={() => desplazarDibujo('izquierda')}>Izquierda</button>
-        <button onClick={() => desplazarDibujo('derecha')}>Derecha</button>
-        <button onClick={() => desplazarDibujo('abajo')}>Abajo</button>
-      </div>
+      <div className="contenedor-principal">
+        <div className="sector">
+          <div className="grid-desplazamiento">
+            <button className="boton-invisible"></button>
+            <button onClick={() => desplazarDibujo('arriba')}>&#9650;</button>
+            <button className="boton-invisible"></button>
+            <button onClick={() => desplazarDibujo('izquierda')}>&#9664;</button>
+            <button className="boton-invisible"></button>
+            <button onClick={() => desplazarDibujo('derecha')}>&#9654;</button>
+            <button className="boton-invisible"></button>
+            <button onClick={() => desplazarDibujo('abajo')}>&#9660;</button>
+            <button className="boton-invisible"></button>
+          </div>
+        </div>
       
-      <GeneradorCodigo
-        coloresGuardados={coloresGuardados}
-        pixeles={pixeles}
-        anchoLienzo={anchoLienzo}
-        altoLienzo={altoLienzo}
-        generarCodigoCompleto={generadorCodigoPixelOpenGl}
-        nombre={"Generar para OpenGL"}
-      />
-
-      <GeneradorCodigo
-        coloresGuardados={coloresGuardados}
-        pixeles={pixeles}
-        anchoLienzo={anchoLienzo}
-        altoLienzo={altoLienzo}
-        generarCodigoCompleto={generadorCodigoPixelMiniWin}
-        nombre={"Generar para MiniWin"}
-      />
-
-      <input
-        type="text"
-        className="nombre-lienzo-input"
-        placeholder="Nombre del lienzo"
-        value={nombreLienzo}
-        onChange={(e) => setNombreLienzo(e.target.value)}
-      />
-      <button className="guardar-lienzo-btn" onClick={manejarGuardarLienzo}>Guardar Lienzo</button>
+        <div className="sector-copiado">
+          <GeneradorCodigo
+            coloresGuardados={coloresGuardados}
+            pixeles={pixeles}
+            anchoLienzo={anchoLienzo}
+            altoLienzo={altoLienzo}
+            generarCodigoCompleto={generadorCodigoPixelOpenGl}
+            nombre={"Generar para OpenGL"}
+          />
+      
+          <GeneradorCodigo
+            coloresGuardados={coloresGuardados}
+            pixeles={pixeles}
+            anchoLienzo={anchoLienzo}
+            altoLienzo={altoLienzo}
+            generarCodigoCompleto={generadorCodigoPixelMiniWin}
+            nombre={"Generar para MiniWin"}
+          />
+        </div>
+      
+        <div className="sector">
+          <input
+            type="text"
+            className="nombre-lienzo-input"
+            placeholder="Nombre del lienzo"
+            value={nombreLienzo}
+            onChange={(e) => setNombreLienzo(e.target.value)}
+          />
+          <button className="guardar-lienzo-btn" onClick={manejarGuardarLienzo}>Guardar Lienzo</button>
+        </div>
+      </div>
       
       <div className="carrusel-lienzos">
         {lienzosGuardados.map((lienzo, index) => (
