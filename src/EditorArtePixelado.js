@@ -56,34 +56,6 @@ const EditorArtePixelado = () => {
     setMostrarControlTamanio(prev => !prev);
   };
 
-  const manejarClicPixel = useCallback((indice, evento) => {
-    evento.preventDefault();
-    if (!Object.values(coloresGuardados).includes(color)) {
-      alert('Por favor, guarda el color con un alias antes de pintar.');
-      return;
-    }
-    if (evento.button === 0) {
-      setEstaPintando(true);
-      pintarPixel(indice);
-    } else if (evento.button === 2) {
-      setEstaBorrando(true);
-      borrarPixel(indice);
-    }
-  }, [color, coloresGuardados]);
-
-  const manejarMovimientoMouse = useCallback((indice) => {
-    if (estaPintando) {
-      pintarPixel(indice);
-    } else if (estaBorrando) {
-      borrarPixel(indice);
-    }
-  }, [estaPintando, estaBorrando]);
-
-  const manejarFinPintado = useCallback(() => {
-    setEstaPintando(false);
-    setEstaBorrando(false);
-  }, []);
-
   const pintarPixel = useCallback((indice) => {
     setPixeles(pixelesAnteriores => {
       const nuevosPixeles = [...pixelesAnteriores];
@@ -98,6 +70,34 @@ const EditorArtePixelado = () => {
       nuevosPixeles[indice] = '';
       return nuevosPixeles;
     });
+  }, []);
+
+  const manejarClicPixel = useCallback((indice, evento) => {
+    evento.preventDefault();
+    if (!Object.values(coloresGuardados).includes(color)) {
+      alert('Por favor, guarda el color con un alias antes de pintar.');
+      return;
+    }
+    if (evento.button === 0) {
+      setEstaPintando(true);
+      pintarPixel(indice);
+    } else if (evento.button === 2) {
+      setEstaBorrando(true);
+      borrarPixel(indice);
+    }
+  }, [color, coloresGuardados, pintarPixel, borrarPixel]);
+
+  const manejarMovimientoMouse = useCallback((indice) => {
+    if (estaPintando) {
+      pintarPixel(indice);
+    } else if (estaBorrando) {
+      borrarPixel(indice);
+    }
+  }, [estaPintando, estaBorrando, pintarPixel, borrarPixel]);
+
+  const manejarFinPintado = useCallback(() => {
+    setEstaPintando(false);
+    setEstaBorrando(false);
   }, []);
 
   const guardarColor = () => {
@@ -202,7 +202,7 @@ const EditorArtePixelado = () => {
       </div>
 
       <div>
-        <a href="https://github.com/Leo-Spj/pixel-art-app" class="github-button" target="_blank">
+        <a href="https://github.com/Leo-Spj/pixel-art-app" className="github-button" target="_blank" rel="noreferrer">
           GitHub
         </a>
       </div>

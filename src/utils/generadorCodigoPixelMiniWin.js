@@ -1,4 +1,3 @@
-import { calcularCoordenadas } from './coordenadas';
 
 export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLienzo, altoLienzo) => {
     let colorFunctions = '';
