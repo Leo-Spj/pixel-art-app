@@ -39,7 +39,7 @@ const EditorArtePixelado = () => {
 
   useEffect(() => {
     setPixeles(Array(anchoLienzo * altoLienzo).fill(''));
-  }, [anchoLienzo, altoLienzo]);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -198,6 +198,7 @@ const EditorArtePixelado = () => {
           setAltoLienzo={setAltoLienzo}
           tamanoCelda={tamanoCelda}
           setTamanoCelda={setTamanoCelda}
+          setPixeles={setPixeles}
         />
       </div>
 

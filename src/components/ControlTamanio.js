@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo, tamanoCelda, setTamanoCelda }) => {
+const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo, tamanoCelda, setTamanoCelda, setPixeles }) => {
 
   const handleAnchoChange = (e) => {
     let value = parseInt(e.target.value);
@@ -11,6 +11,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
       value = anchoLienzo > value ? value - 1 : value + 1;
     }
     setAnchoLienzo(value);
+    ajustarPixeles(value, altoLienzo);
   };
 
   const handleAltoChange = (e) => {
@@ -22,6 +23,7 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
       value = altoLienzo > value ? value - 1 : value + 1;
     }
     setAltoLienzo(value);
+    ajustarPixeles(anchoLienzo, value);
   };
 
   const handleTamanoCeldaChange = (e) => {
@@ -30,6 +32,18 @@ const ControlTamanio = ({ anchoLienzo, setAnchoLienzo, altoLienzo, setAltoLienzo
       value = 0;
     }
     setTamanoCelda(value);
+  };
+
+  const ajustarPixeles = (nuevoAncho, nuevoAlto) => {
+    setPixeles((pixelesAnteriores) => {
+      const nuevosPixeles = Array(nuevoAncho * nuevoAlto).fill('');
+      for (let y = 0; y < Math.min(altoLienzo, nuevoAlto); y++) {
+        for (let x = 0; x < Math.min(anchoLienzo, nuevoAncho); x++) {
+          nuevosPixeles[y * nuevoAncho + x] = pixelesAnteriores[y * anchoLienzo + x];
+        }
+      }
+      return nuevosPixeles;
+    });
   };
 
   return (
