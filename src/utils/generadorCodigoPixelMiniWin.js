@@ -1,7 +1,6 @@
-
 export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLienzo, altoLienzo) => {
     let colorFunctions = '';
-    let drawCommands = '';
+    let filas = {};
 
     Object.entries(coloresGuardados).forEach(([alias, colorHex]) => {
         const r = parseInt(colorHex.slice(1, 3), 16);
@@ -13,24 +12,26 @@ export const generadorCodigoPixelMiniWin = (coloresGuardados, pixeles, anchoLien
         }`;
     });
 
-    const pixelCommands = pixeles.map((colorPixel, indice) => {
-        if (colorPixel) {
-            const x = indice % anchoLienzo;
-            const y = Math.floor(indice / anchoLienzo);
-            // Ajustamos las coordenadas para corregir la orientación
-            const xAjustado = x;
-            const yAjustado = y;
-            const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || 'ColorSinNombre';
-            return `    dibujaCuadrado(${xAjustado}, ${yAjustado} , "${aliasActual}");`;
+    pixeles.forEach((colorPixel, indice) => {
+        const x = indice % anchoLienzo;
+        const y = Math.floor(indice / anchoLienzo);
+        const aliasActual = Object.keys(coloresGuardados).find(clave => coloresGuardados[clave] === colorPixel) || '';
+        if (!filas[y]) {
+            filas[y] = [];
         }
-        return null;
-    }).filter(Boolean);
+        filas[y][x] = aliasActual;
+    });
 
-    drawCommands = pixelCommands.join('\n');
+    let drawCommands = '';
+    Object.entries(filas).forEach(([fila, colores]) => {
+        const coloresFila = colores.map(color => color === '' ? '""' : `"${color}"`).join(', ');
+        drawCommands += `    dibujaFila(${fila}, {${coloresFila}});\n`;
+    });
 
     return `
 #include "miniwin.h"
 #include <string>
+#include <vector>
 
 using namespace miniwin;
 using namespace std;
@@ -42,6 +43,7 @@ void colores(const string& color) {${colorFunctions}
 }
 
 void dibujaCuadrado(int a, int b, const string& colorRelleno) {
+    if (colorRelleno.empty()) return; // No dibujar nada si el color es una cadena vacía
     const int x = a * escalado;
     const int y = b * escalado;
     colores(colorRelleno);
@@ -55,12 +57,19 @@ void dibujaCuadrado(int a, int b, const string& colorRelleno) {
     }
 }
 
+void dibujaFila(int fila, const vector<string>& colores) {
+    for (int i = 0; i < colores.size(); ++i) {
+        if (!colores[i].empty()) { // Verificar que el color no sea nulo o una cadena vacía
+            dibujaCuadrado(i, fila, colores[i]);
+        }
+    }
+}
+
 int main() {
     vredimensiona(${anchoLienzo} * escalado, ${altoLienzo} * escalado);
 
     // Dibujando
 ${drawCommands}
-
     refresca();
     return 0;
 }

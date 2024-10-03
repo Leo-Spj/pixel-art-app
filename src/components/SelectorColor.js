@@ -12,11 +12,11 @@ const SelectorColor = ({ color, setColor, setAlias, guardarColor, coloresGuardad
   const generarAlias = () => {
     const aliasExistentes = Object.keys(coloresGuardados);
     const numeros = aliasExistentes
-      .filter(alias => alias.startsWith('color_'))
-      .map(alias => parseInt(alias.replace('color_', ''), 10))
+      .filter(alias => alias.startsWith('c_'))
+      .map(alias => parseInt(alias.replace('c_', ''), 10))
       .filter(num => !isNaN(num));
     const maxNumero = numeros.length > 0 ? Math.max(...numeros) : 0;
-    return `color_${maxNumero + 1}`;
+    return `c_${maxNumero + 1}`;
   };
 
   const manejarCambioColor = (e) => {
