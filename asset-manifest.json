@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/pixel-art-app/static/css/main.6d660255.css",
-    "main.js": "/pixel-art-app/static/js/main.dfea9eb9.js",
+    "main.js": "/pixel-art-app/static/js/main.c360679d.js",
     "static/js/453.6b839398.chunk.js": "/pixel-art-app/static/js/453.6b839398.chunk.js",
     "static/media/ConfigLienzo.svg": "/pixel-art-app/static/media/ConfigLienzo.5971b85dccea95c6b6fcbf69be9d2a1b.svg",
     "static/media/IconoEstructuras3D.svg": "/pixel-art-app/static/media/IconoEstructuras3D.339936092fe42232a2612a3d709470ef.svg",
     "index.html": "/pixel-art-app/index.html",
     "main.6d660255.css.map": "/pixel-art-app/static/css/main.6d660255.css.map",
-    "main.dfea9eb9.js.map": "/pixel-art-app/static/js/main.dfea9eb9.js.map",
+    "main.c360679d.js.map": "/pixel-art-app/static/js/main.c360679d.js.map",
     "453.6b839398.chunk.js.map": "/pixel-art-app/static/js/453.6b839398.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6d660255.css",
-    "static/js/main.dfea9eb9.js"
+    "static/js/main.c360679d.js"
   ]
 }
