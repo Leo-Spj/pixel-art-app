@@ -2,6 +2,7 @@ export const gerarCodigoNaveVolteada = (coloresGuardados, pixeles, anchoLienzo) 
     let colorFunctions = '';
     let filas = {};
 
+    // Generar funciones de color
     Object.entries(coloresGuardados).forEach(([alias, colorHex]) => {
         const r = parseInt(colorHex.slice(1, 3), 16);
         const g = parseInt(colorHex.slice(3, 5), 16);
@@ -9,6 +10,7 @@ export const gerarCodigoNaveVolteada = (coloresGuardados, pixeles, anchoLienzo) 
         colorFunctions += `{"${alias}", {${r}, ${g}, ${b}}},\n`;
     });
 
+    // Asignar píxeles a filas
     pixeles.forEach((colorPixel, indice) => {
         const x = indice % anchoLienzo;
         const y = Math.floor(indice / anchoLienzo);
@@ -19,10 +21,14 @@ export const gerarCodigoNaveVolteada = (coloresGuardados, pixeles, anchoLienzo) 
         filas[y][x] = aliasActual;
     });
 
+    // Invertir las filas
+    const filasInvertidas = Object.entries(filas).reverse();
+
+    // Generar comandos de dibujo
     let drawCommands = '';
-    Object.entries(filas).reverse().forEach(([fila, colores]) => {
+    filasInvertidas.forEach(([fila, colores], index) => {
         const coloresFila = colores.map(color => color === '' ? '""' : `"${color}"`).join(', ');
-        drawCommands += `dibujaFila(${fila}, {${coloresFila}});\n`;
+        drawCommands += `dibujaFila(${index}, {${coloresFila}});\n`;
     });
 
     return `setColor(color, {\n${colorFunctions}});\n\n${drawCommands}`;
