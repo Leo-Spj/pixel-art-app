@@ -13,6 +13,8 @@ import './EditorArtePixelado.css';
 import IconoConfigLienzo from './ConfigLienzo.svg';
 import IconoEstructuras3D from './IconoEstructuras3D.svg';
 import { guardarLienzo, cargarLienzo, eliminarLienzo, obtenerLienzos } from './lienzoStorage'; // Importar las funciones
+import { gerarCodigoNave } from './utils/gerarCodigoNave';
+import { gerarCodigoNaveVolteada } from './utils/gerarCodigoNaveVolteada';
 
 const EditorArtePixelado = () => {
   const [anchoLienzo, setAnchoLienzo] = useState(36);
@@ -298,6 +300,24 @@ const EditorArtePixelado = () => {
             altoLienzo={altoLienzo}
             generarCodigoCompleto={generadorCodigoPixelMiniWin}
             nombre={"Generar para MiniWin"}
+          />
+
+          <GeneradorCodigo
+            coloresGuardados={coloresGuardados}
+            pixeles={pixeles}
+            anchoLienzo={anchoLienzo}
+            altoLienzo={altoLienzo}
+            generarCodigoCompleto={gerarCodigoNave}
+            nombre={"Generar nave"}
+          />
+
+          <GeneradorCodigo
+            coloresGuardados={coloresGuardados}
+            pixeles={pixeles}
+            anchoLienzo={anchoLienzo}
+            altoLienzo={altoLienzo}
+            generarCodigoCompleto={gerarCodigoNaveVolteada}
+            nombre={"Generar nave volteada"}
           />
         </div>
       
